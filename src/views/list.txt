@@ -1,0 +1,194 @@
+@extends('layouts.admin.index')
+@section('content')
+
+<!-- Main content -->
+<div class="container-xxl flex-grow-1 container-p-y">
+<div class="d-flex gap-3 top-input-space">
+        <h5 class="space">
+            ModuleName <span class="total"></span>
+        </h5> 
+
+        <div class="d-flex flex-wrap right-side-top">
+           //permissionsCode
+
+           
+            @if(isset($permission) && $permission != null && $permission->eWrite == "Yes")
+            <div class="space">
+                     <a href="{{route('admin.module_name.add')}}" class="btn btn-primary">+ Add</a>
+            </div>
+            @endif
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+         <div class="card">
+            <div class="card-body table-responsive">
+               <table class="table table-bordered">
+                  <thead>
+                     <tr>
+                            //TableHeading                        
+                     </tr>
+                  </thead>
+                  <tbody id="table_record" class="table-border-bottom-0">
+                  </tbody>
+               </table>
+               <div class="text-center">
+                  <div class="spinner-border m-5 text-warning" role="status" class="text-center" id="ajax-loader" style="display:none;">
+                     <span class="visually-hidden">Loading...</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+@endsection
+@section('custom-css')
+<style></style>
+@endsection
+@section('custom-js')
+<script type="text/javascript">
+
+
+    function filter(vUniqueCode, vAction, vPages)
+    {
+        var vUniqueCode      = vUniqueCode;
+        var vAction          = vAction;
+        var pages            = vPages;
+        //jsvar
+        $("#table_record").html('');
+        $("#ajax-loader").show();
+        setTimeout(function() {
+        $.ajax({
+           url: "{{route('admin.module_name.ajax_listing')}}",
+           type: "POST",
+           headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+           data: {vUniqueCode:vUniqueCode,vAction:vAction,pages:pages,variables},
+           success: function(response) {
+               $("#table_record").html(response);
+               var updatedCount = $("#table_record").find('.count').val();
+               $('.total').text('(' + updatedCount + ')');
+               $('#selectall').prop('checked', false); 
+               $("#ajax-loader").hide();
+           }
+       });
+       }, 500);
+    }
+
+    $(document).ready(function() {
+         filter("", "search", "");
+    });
+
+    var delayTimer;
+    $(document).on("keyup", ".search", function() {
+        var value = $(this).val();
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function()
+        {
+           filter("", "search", "");
+        }, 500);
+    });
+
+    $(document).on("change", "#eFeature_search", function() {
+        filter("", "search", "");
+    });
+
+     $(document).on("change", "#eStatus_search", function() {
+        filter("", "search", "");
+    });
+
+     $(document).on("change", "#iOrder_search", function() {
+        filter("", "search", "");
+    });
+
+    $(document).on("change", "#eDeleted", function() {
+        filter("", "delete", "");
+    });
+
+     $(document).on('click', '.ajax_page', function() {
+        var vPages           = $(this).data("pages");
+        filter("", "search", vPages);
+     
+    });
+   
+
+     $(document).on('click', '#selectall', function() {
+        if (this.checked) {
+            $('.checkboxall').each(function() {
+                $(".checkboxall").prop('checked', true);
+            });
+        } else {
+            $('.checkboxall').each(function() {
+                $(".checkboxall").prop('checked', false);
+            });
+        }
+    });
+
+
+
+   $(document).on('click', '.delete', function() {
+        if (confirm('Are you sure delete this data?')) {
+            
+            var vUniqueCode = $(this).data("id");
+            setTimeout(function() {
+                filter(vUniqueCode, "delete", "");
+            }, 500);
+        }
+      });
+
+      $(document).on('change', '#eStatus', function() {
+        if ($("#selectall").is(':checked') == true || $("input[name = 'vUniqueCode[]']").is(':checked') == true) {
+            var eStatus   = $("#eStatus").val();
+
+            if(eStatus != ""){
+            if (eStatus == "delete") {
+
+                if (confirm('Are you sure you want to delete?')) {
+
+                        vUniqueCode = [];
+                        $("input[name='vUniqueCode[]']:checked").each(function() {
+                            vUniqueCode.push($(this).val());
+                        });
+
+                        var vUniqueCode = vUniqueCode.join(",");
+                        $("#table_record").html('');
+                        filter(vUniqueCode, "status", "");
+                }
+            }
+            else if(eStatus == "recover")
+            {
+                if(confirm('Are you sure recover data?')) {
+                        vUniqueCode = [];
+                        $("input[name='vUniqueCode[]']:checked").each(function() {
+                            vUniqueCode.push($(this).val());
+                        });
+
+                        var vUniqueCode = vUniqueCode.join(",");
+                        $("#table_record").html('');
+                        filter(vUniqueCode, "status", "");
+                }
+            }
+            else {
+
+                if (confirm('Are you sure changes this status?')) {
+                        vUniqueCode = [];
+                        $("input[name='vUniqueCode[]']:checked").each(function() {
+                            vUniqueCode.push($(this).val());
+                        });
+
+                        var vUniqueCode = vUniqueCode.join(",");
+                        $("#table_record").html('');
+                        filter(vUniqueCode, "status", "");
+                }
+            }
+          }
+        } else {
+            var eStatus   = $("#eStatus").val();
+            if(eStatus.length != 0){
+            alert('Please Select Data');
+            }
+        }
+    });
+
+</script>
+@endsection

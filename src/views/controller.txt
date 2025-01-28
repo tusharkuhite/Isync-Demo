@@ -1,0 +1,306 @@
+<?php
+
+namespace App\Http\Controllers\Panel;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Panel\ModelName;
+use App\Libraries\General;
+use App\Libraries\Paginator;
+
+class ControllerName extends Controller
+{
+    public function index()
+    {
+        return view('Panel.module_name.listing');
+    }
+
+    public function ajax_listing(Request $request)
+    {
+       
+        $Pagination_Information     = General::get_pagination_count();
+
+        $vAction         = $request->vAction;
+        $vColumn         = "iModuleId";
+        $vOrder          = "DESC";
+        $vUniqueCode     = $request->vUniqueCode;
+        $eStatus         = $request->eStatus;
+        $eStatus_search  = $request->eStatus_search;
+        $eDeleted        = $request->eDeleted;
+        //Module Columns
+       
+        if($vAction == "delete" && !empty($vUniqueCode))
+        {
+            $where                 = array();
+            $where['vUniqueCode']  = $request->vUniqueCode;
+            $data['eDelete'] = 'Yes';
+            $ID = ModelName::UpdateData($where,$data);
+        }
+        if($vAction == "status" && !empty($vUniqueCode))
+        {
+            $result = (explode(",",$vUniqueCode));
+
+            if($eStatus == "delete")
+            {
+                foreach($result as $key => $value)
+                {
+                    $where                 = array();
+                    $where['vUniqueCode']    = $value;
+                    $data = array();
+                    $data['eDelete'] = 'Yes';
+                    ModelName::UpdateData($where,$data);
+                }
+            }
+            elseif($eStatus == "Recover")
+            {
+                foreach($result as $key => $value)
+                {
+                    $where                 = array();
+                    $where['vUniqueCode']  = $value;
+                    $data = array();
+                    $data['eDelete'] = 'No';
+                    ModelName::UpdateData($where,$data);
+                }
+            }
+            else
+            {
+                foreach($result as $key => $value)
+                {
+                    $where = array();
+                    $where["vUniqueCode"] = $value;
+
+                    $data = array();
+                    $data['eStatus'] = $eStatus;
+
+                    ModelName::UpdateData($where,$data);
+                }
+            }
+        }
+
+        $criteria                    = array();
+        //criterias
+        
+        if($eStatus_search != null)
+        {
+           $criteria['eStatus']      = $eStatus_search;
+        }
+
+        if($eDeleted != null)
+        {
+           $criteria['eDelete']      = $eDeleted;
+        }
+        $criteria["paging"]          = false;
+        $criteria['column']          = $vColumn;
+        $criteria['order']           = $vOrder;
+
+        $ModuleData                  = ModelName::total_data($criteria);
+
+        $pages                      = 1;
+        
+        if($request->pages != "")
+        {
+            $pages = $request->pages;
+        }
+
+        $paginator = new Paginator($pages);
+        $paginator->total = $ModuleData;
+
+        if (!empty($Pagination_Information->vSize)) 
+        {
+            $paginator->itemsPerPage = $Pagination_Information->vSize;
+        }
+        if(!empty($request->limit_page))
+        {
+            $selectedpagelimit = $request->limit_page;
+        }
+        else
+        {
+            $selectedpagelimit = $paginator->itemsPerPage;
+        }
+
+        $start = ($paginator->currentPage - 1) * $selectedpagelimit;
+        $limit = $selectedpagelimit;
+        $paginator->is_ajax = true;
+        $paging = true;
+
+        $criteria["start"]      = $start;
+        $criteria["limit"]      = $limit;
+        $criteria["paging"]     = $paging;
+
+        $data                   = array();
+        $data['data']           = ModelName::get_all_data($criteria);
+
+        if($paginator->total > $selectedpagelimit)
+        {
+            $data['paging'] = $paginator->paginate($selectedpagelimit);
+        }
+        
+
+        return view('Panel.module_name.ajax_listing')->with($data);
+    }
+
+    public function add()
+    {
+        return view('Panel.module_name.add');
+    }
+
+    public function edit($vUniqueCode)
+    {
+       
+        $criteria                   = array();
+        $criteria["vUniqueCode"]    = $vUniqueCode;
+        $data['modules']             = ModelName::get_by_id($criteria);
+        if(!empty($data['modules']))
+        {    
+            return view('Panel.module_name.add')->with($data);
+        }
+        else
+        {
+            return redirect()->route('Panel.module_name.listing');
+        }
+    }
+
+    public function store(Request $request)
+    {
+        $vUniqueCode = $request->vUniqueCode;
+
+        $data                 = array();
+       //addData
+        
+        if(!empty($vUniqueCode))
+        {
+            $data['dtUpdatedDate'] = date("Y-m-d H:i:s");
+
+            $where                 = array();
+            $where['vUniqueCode']  = $vUniqueCode;
+
+            $ID = ModelName::UpdateData($where, $data);
+
+            //Image Code Start
+            if($request->hasFile('vImage'))
+            {
+                $uploadedImage   = $request->file('vImage');
+                $basePath    = 'uploads/module';
+                $mainPath    = $basePath . '/module_main';
+                $smallPath   = $basePath . '/module_small';
+                $data_image = General::upload_image($uploadedImage,$smallPath,$mainPath);
+
+                if($data_image['type'] == 'IMAGE_COMPRESS_ISSUE'){
+
+                    return redirect()->route('Panel.module_name.listing')->with([
+                        'success' => 'Module data updated successfully.',
+                        'error' => 'This Image has issue to compress, Please upload another image.',
+                    ]);
+
+                }elseif($data_image['type'] == 'SUCCESS'){
+                    $where = array();
+                    $where['vUniqueCode'] = $request->vUniqueCode;
+                    $row = ModelName::get_by_id($where);
+
+                    if(!empty($row->vImage)){
+                        $vImage = $mainPath.'/'.$row->vImage;
+                        if(file_exists($vImage)){
+                            unlink($vImage);
+                        }
+                    }
+
+                    if(!empty($row->vWebpImage)){
+                        $vWebImage = $smallPath.'/'.$row->vWebpImage;
+                        if(file_exists($vWebImage)){
+                            unlink($vWebImage);
+                        }
+                    }
+
+                    $data               = array();
+                    $data['vImage']     = $data_image['data']['vImage'];
+                    $data['vWebpImage'] = $data_image['data']['vWebpImage'];
+                   
+                    ModelName::UpdateData($where, $data);
+
+                    return redirect()->route('Panel.module_name.listing')->with([
+                        'success' => 'Module data updated successfully.'
+                    ]);
+
+                }elseif($data_image['type'] == 'IMAGE_UPLOADED_ISSUE'){
+
+                    return redirect()->route('Panel.module_name.listing')->with([
+                        'success' => 'Module data updated successfully.',
+                        'error' => 'Image not uploaded, something went wrong!',
+                    ]);
+
+                }elseif($data_image['type'] == 'IMAGE_UNSUPPORTED_ISSUE'){
+
+                    return redirect()->route('Panel.module_name.listing')->with([
+                        'success' => 'Module data updated successfully.',
+                        'error' => 'Unsupported image format. Please upload a JPG, JPEG, or PNG image.',
+                    ]);
+                }
+            }
+            //Image Code End
+            return redirect()->route('Panel.module_name.listing')->withSuccess('Module data updated successfully.');
+        }
+        else
+        {
+            
+            $data['dtAddedDate']   = date("Y-m-d h:i:s");
+            $ID = ModelName::AddData($data);
+
+            if($ID != null)
+            {
+                $where = array();
+                $where["iModuleId"]    = $ID;
+                $data = array();
+                $data['vUniqueCode']   = md5(uniqid(rand(),true)).md5(time()).md5($ID);
+                ModelName::UpdateData($where, $data);
+                //Image Code Start
+
+                if($request->hasFile('vImage'))
+                {
+                    $uploadedImage = $request->file('vImage');
+                    $basePath   = 'uploads/module';
+                    $mainPath   = $basePath . '/module_main';
+                    $smallPath  = $basePath . '/module_small';
+                    $data_image = General::upload_image($uploadedImage,$smallPath,$mainPath);
+
+                    if($data_image['type'] == 'IMAGE_COMPRESS_ISSUE'){
+
+                                return redirect()->route('Panel.module_name.listing')->with([
+                                    'success' => 'Module data updated successfully.',
+                                    'error' => 'This Image has issue to compress, Please upload another image.',
+                                ]);
+
+                    }elseif($data_image['type'] == 'SUCCESS'){
+                        $where = array();
+                        $where['vUniqueCode'] = $data['vUniqueCode'];
+                        
+                        $data               = array();
+                        $data['vImage']     = $data_image['data']['vImage'];
+                        $data['vWebpImage'] = $data_image['data']['vWebpImage'];
+                        ModelName::UpdateData($where, $data);
+
+                        return redirect()->route('Panel.module_name.listing')->with([
+                            'success' => 'Module data updated successfully.'
+                        ]);
+
+                    }elseif($data_image['type'] == 'IMAGE_UPLOADED_ISSUE'){
+
+                        return redirect()->route('Panel.module_name.listing')->with([
+                            'success' => 'Module data updated successfully.',
+                            'error' => 'Image not uploaded, something went wrong!',
+                        ]);
+
+                    }elseif($data_image['type'] == 'IMAGE_UNSUPPORTED_ISSUE'){
+
+                        return redirect()->route('Panel.module_name.listing')->with([
+                            'success' => 'Module data created successfully.',
+                            'error' => 'Unsupported image format. Please upload a JPG, JPEG, or PNG image.',
+                        ]);
+
+                    }
+                }
+                //Image Code End
+            }
+            return redirect()->route('Panel.module_name.listing')->withSuccess('Module data created successfully.');
+        }
+    }
+}

@@ -1,0 +1,67 @@
+@extends('layouts.admin.index')
+
+@section('content')
+
+<div class="container-xxl flex-grow-1 container-p-y">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="row mb-2">
+            <div class="col-sm-6 mt-2">
+                <h5>{{ isset($module_names) ? 'Edit' : 'Add' }} ModuleName</h5>
+            </div>
+         </div>
+         <form action="{{route('admin.module_name.store')}}" name="frm" id="frm" method="post"
+               enctype="multipart/form-data">
+               @csrf
+              <div class="card mb-4">
+                <div class="card-body">
+                  <input type="hidden" id="vUniqueCode" name="vUniqueCode"
+                     value="@if(isset($module_names)){{$module_names->vUniqueCode}}@endif">
+                  <div class="row g-3">
+                     //AddFields
+                  </div>
+               </div>
+               <div class="card-footer col-12 align-self-end d-inline-block mt-0 text-left">
+                  <a href="javascript:;" class="btn btn-primary submit" id="save">Submit</a>
+                  <a href="javascript:;" class="btn btn-primary loading" style="display: none;">
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>Loading...
+                  </a>
+                  <a href="{{route('admin.module_name.listing')}}" class="btn-info btn">Back</a>
+               </div>
+              </div>
+            </form>
+         </div>
+     </div>
+</div>
+@endsection
+@section('custom-css')
+<style></style>
+@endsection
+@section('custom-js')
+<script type="text/javascript">
+
+//ImageAdd
+
+$(document).on('click', '.submit', function() {
+       
+      //VarAdd
+
+       var error = false;
+
+        //ValAdd
+
+        
+       if (error == true) {
+         return false;
+      } else {
+         $('.submit').hide();
+         $('.loading').show();
+         
+         setTimeout(function() {
+            $("#frm").submit();
+            return true;
+         }, 1000);
+      }
+});
+</script>
+@endsection
