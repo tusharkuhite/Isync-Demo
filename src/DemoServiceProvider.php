@@ -15,7 +15,8 @@ class DemoServiceProvider extends ServiceProvider
 
         
         $this->publishes([
-            __DIR__ . '/models' => app_path('Models'),
+            __DIR__ . '/models/admin' => app_path('Models'),
+            __DIR__ . '/models/User.php' => app_path('Models/User.php'),
             __DIR__ . '/Controllers' => app_path('Http/Controllers'),
             __DIR__ . '/views/layouts' => resource_path('views/layouts'),
             __DIR__ . '/views/admin' => resource_path('views/admin'),
@@ -25,6 +26,7 @@ class DemoServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole() && $this->isPublishing('generate-demo-files')) {
             $this->updateWebRoutes();
+            $this->replaceContentInUserModel();
         }
 
     }
@@ -59,6 +61,17 @@ class DemoServiceProvider extends ServiceProvider
             in_array('--tag=' . $tag, request()->server('argv', []));
     }
     
+    private function replaceContentInUserModel()
+    {
+        $userModelPath = app_path('Models/User.php');
+
+        if (File::exists($userModelPath)) {
+            
+            $newContent = File::get(__DIR__ . '/models/User.php');
+            File::put($userModelPath, $newContent);  // Write the new content to the file
+
+        } 
+    }
 
     public function register()
     {
