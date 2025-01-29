@@ -15,10 +15,10 @@ use App\Http\Controllers\admin\MetaController;
 use Illuminate\Support\Facades\Route;
 
 
-
-Route::get('/',function(){
-    dd('123');
+Route::get('/', function () {
+    return view('welcome');
 });
+
 
 /************************** admin Routes ********************************/
 
@@ -38,14 +38,17 @@ Route::get('admin/dashboard',[DashboardController::class, 'index'])->name('admin
 //admin user
 Route::get('admin/admin',[AdminController::class, 'index'])->name('admin.admin.listing');
 Route::post('admin/admin/ajax_listing', [AdminController::class, 'ajax_listing'])->name('admin.admin.ajax_listing');
+
 // --- add user profile details -->
 Route::get('admin/admin/add',[AdminController::class, 'add'])->name('admin.admin.add');
 Route::post('admin/admin/store',[AdminController::class, 'store'])->name('admin.admin.store');
 Route::get('admin/admin/edit/{iAdminId}',[AdminController::class, 'edit'])->name('admin.admin.edit');
+
 //header admin profile --->
 Route::get('admin/profile/{iAdminId}',[ProfileController::class, 'index'])->name('admin.profile.edit');
 Route::get('admin/profile/change_password/{iAdminId}',[ProfileController::class, 'change_password'])->name('admin.profile.change_password');
 Route::post('admin/profile/store',[ProfileController::class, 'store'])->name('admin.profile.store');
+
 // check unique email
 Route::post('admin/admin/check_unique_email', [AdminController::class, 'check_unique_email'])->name('admin.admin.check_unique_email');
 
@@ -74,13 +77,14 @@ Route::post('admin/permission/ajax_listing', [PermissionController::class, 'ajax
 Route::get('admin/permission/add',[PermissionController::class, 'add'])->name('admin.permission.add');
 Route::post('admin/permission/store',[PermissionController::class, 'store'])->name('admin.permission.store');
 Route::get('admin/permission/edit/{iUserId}',[PermissionController::class, 'edit'])->name('admin.permission.edit');
+
 // permission modules
 Route::post('admin/permission/get_module_by_role',[PermissionController::class, 'get_module_by_role'])->name('admin.permission.get_module_by_role');
+
 // user by role
 Route::post('admin/permission/get_user_by_role',[PermissionController::class, 'get_user_by_role'])->name('admin.permission.get_user_by_role');
 
 // menu
-
 Route::get('admin/menu',[MenuController::class, 'index'])->name('admin.menu.listing');
 Route::post('admin/menu/ajax_listing', [MenuController::class, 'ajax_listing'])->name('admin.menu.ajax_listing');
 Route::get('admin/menu/add',[MenuController::class, 'add'])->name('admin.menu.add');
