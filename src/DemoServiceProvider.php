@@ -13,8 +13,7 @@ class DemoServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/views', 'demo');
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 
-        $this->updateWebRoutes();
-
+        
         $this->publishes([
             __DIR__ . '/models' => app_path('Models'),
             __DIR__ . '/Controllers' => app_path('Http/Controllers'),
@@ -22,6 +21,7 @@ class DemoServiceProvider extends ServiceProvider
             __DIR__ . '/views/admin' => resource_path('views/admin'),
             __DIR__ . '/Assets/' => public_path(),
             __DIR__ . '/General/' => app_path('Libraries/'),
+            $this->updateWebRoutes()
             // __DIR__ . '/routes/generatedRoute.php' => base_path('routes/web.php')
         ], 'generate-demo-files');
 
