@@ -20,37 +20,44 @@ class DemoServiceProvider extends ServiceProvider
             __DIR__ . '/views/layouts' => resource_path('views/layouts'),
             __DIR__ . '/views/admin' => resource_path('views/admin'),
             __DIR__ . '/Assets/' => public_path(),
-            __DIR__ . '/General/' => app_path('Libraries/'),
-            $this->updateWebRoutes()
-            // __DIR__ . '/routes/generatedRoute.php' => base_path('routes/web.php')
+            __DIR__ . '/General/' => app_path('Libraries/')
         ], 'generate-demo-files');
+
+        if ($this->app->runningInConsole() && $this->isPublishing('generate-demo-files')) {
+            $this->updateWebRoutes();
+        }
 
     }
 
     private function updateWebRoutes()
-{
-    $generatedRoutePath = __DIR__ . '/routes/generatedRoute.php';
-    $webRoutePath = base_path('routes/web.php');
+    {
+        $generatedRoutePath = __DIR__ . '/routes/generatedRoute.php';
+        $webRoutePath = base_path('routes/web.php');
 
-    if (File::exists($generatedRoutePath) && File::exists($webRoutePath)) {
-        $generatedRouteLines = file($generatedRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $webRouteContent = file($webRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (File::exists($generatedRoutePath) && File::exists($webRoutePath)) {
+            $generatedRouteLines = file($generatedRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $webRouteContent = file($webRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-        $missingLines = [];
+            $missingLines = [];
 
-        foreach ($generatedRouteLines as $line) {
-            
-            if (!in_array($line, $webRouteContent)) {
-                $missingLines[] = $line;
+            foreach ($generatedRouteLines as $line) {
+                
+                if (!in_array($line, $webRouteContent)) {
+                    $missingLines[] = $line;
+                }
             }
-        }
 
-        if (!empty($missingLines)) {
-            File::append($webRoutePath, PHP_EOL . implode(PHP_EOL, $missingLines) . PHP_EOL);
+            if (!empty($missingLines)) {
+                File::append($webRoutePath, PHP_EOL . implode(PHP_EOL, $missingLines) . PHP_EOL);
+            } 
         } 
-    } 
-}
+    }
 
+    private function isPublishing($tag)
+    {
+        return in_array('vendor:publish', request()->server('argv', [])) &&
+            in_array('--tag=' . $tag, request()->server('argv', []));
+    }
     
 
     public function register()
