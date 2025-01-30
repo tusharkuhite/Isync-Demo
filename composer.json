@@ -23,7 +23,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Isync\\Demo\\DemoServiceProvider"
+                "Isync\\Demo\\DemoServiceProvider",
+                "Intervention\\Image\\ImageServiceProvider"
             ],
             "aliases": {
             "Image": "Intervention\\Image\\Facades\\Image"
