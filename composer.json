@@ -9,7 +9,8 @@
     },
     "require": {
         "php": ">=8.0",
-        "illuminate/support": "^10.0|^11.0"
+        "illuminate/support": "^10.0|^11.0",
+        "intervention/image": "^3.11"
     },
     "require-dev": {
         "laravel/pint": "^1.18",
@@ -23,7 +24,10 @@
         "laravel": {
             "providers": [
                 "Isync\\Demo\\DemoServiceProvider"
-            ]
+            ],
+            "aliases": {
+            "Image": "Intervention\\Image\\Facades\\Image"
+        }
         }
     }
 

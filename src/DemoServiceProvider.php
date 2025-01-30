@@ -4,6 +4,7 @@ namespace Isync\Demo;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\ImageServiceProvider;
 
 class DemoServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class DemoServiceProvider extends ServiceProvider
             __DIR__ . '/General/' => app_path('Libraries/')
         ], 'generate-demo-files');
 
+        $this->publishes([
+            __DIR__.'/../config/image.php' => config_path('image.php'),
+        ]);
+
         if ($this->app->runningInConsole() && $this->isPublishing('generate-demo-files')) {
             $this->updateWebRoutes();
             $this->replaceContentInUserModel();
@@ -35,22 +40,11 @@ class DemoServiceProvider extends ServiceProvider
         $generatedRoutePath = __DIR__ . '/routes/generatedRoute.php';
         $webRoutePath = base_path('routes/web.php');
 
-        if (File::exists($generatedRoutePath) && File::exists($webRoutePath)) {
-            $generatedRouteLines = file($generatedRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            $webRouteContent = file($webRoutePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (File::exists($webRoutePath)) {
+            
+            $newContent = File::get($generatedRoutePath);
+            File::put($webRoutePath, $newContent);  
 
-            $missingLines = [];
-
-            foreach ($generatedRouteLines as $line) {
-                
-                if (!in_array($line, $webRouteContent)) {
-                    $missingLines[] = $line;
-                }
-            }
-
-            if (!empty($missingLines)) {
-                File::append($webRoutePath, PHP_EOL . implode(PHP_EOL, $missingLines) . PHP_EOL);
-            } 
         } 
     }
 
@@ -67,13 +61,15 @@ class DemoServiceProvider extends ServiceProvider
         if (File::exists($userModelPath)) {
             
             $newContent = File::get(__DIR__ . '/models/User.php');
-            File::put($userModelPath, $newContent);  // Write the new content to the file
+            File::put($userModelPath, $newContent);  
 
         } 
     }
 
     public function register()
     {
+        $this->app->register(ImageServiceProvider::class);
+
         if (file_exists(__DIR__ . '/helpers.php')) {
             require_once __DIR__ . '/helpers.php';
         }

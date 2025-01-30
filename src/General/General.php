@@ -1,27 +1,18 @@
 <?php
 namespace App\Libraries;
+
 use App\Models\admin\RoleModel;
-use App\Models\admin\UserModel;
 use App\Models\admin\SettingModel;
 use App\Models\admin\ModuleModel;
-use Illuminate\Support\Facades\Route;
 use App\Models\admin\PermissionModel;
 use App\Models\admin\MenuModel;
-use App\Models\admin\ModuleLabelModel;
 use App\Models\admin\PaginationModel;
 use App\Models\admin\MetaModel;
-use App\Models\admin\OgMetaModel;
-use App\Models\admin\LogModel;
-use App\Models\admin\LabelsModel;
-use App\Models\front\FrontHowItWorkModel;
-use Illuminate\Support\Facades\Storage;
-use Aws\Credentials\Credentials;
-use Aws\S3\S3Client;
-use Aws\S3\Exception\S3Exception;
-
-use Mail;
-use Session;
-use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Image;
+use Illuminate\Support\Facades\Auth;
 
  
 class General
@@ -293,14 +284,6 @@ class General
         }
     }
 
-    static function ogmeta_info($criteria = '')
-    {
-        if(!empty($criteria)){
-            $meta = OgMetaModel::get_by_id($criteria);
-            return $meta;
-        }
-    }
-
     static function check_module_permission(){
         $criteria                = array();
         $criteria['vController'] = class_basename(Route::current()->controller);
@@ -368,11 +351,6 @@ class General
         {
             $image->move($original_image_path, $originalName);
             $imagePath = $original_image_path . '/' . $originalName;
-            // dd($imagePath);
-            $image_type    = $image->getClientMimeType();
-           General::amazon_s3_upload($imagePath,$image_type);
-        //    dd(General::getS3url($imagePath));
-           
 
             if(file_exists($imagePath)){
                 
@@ -417,8 +395,6 @@ class General
 
                 $webpPath = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';
                 $image->save($webpPath, $compress);
-                
-                General::amazon_s3_upload($webpPath,'image/webp');
                
                 $compressedImageSize = $image->filesize();
                 if($compressedImageSize <= 5 * 1024) 
@@ -426,50 +402,24 @@ class General
                     $small_img_path = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';
                     if(file_exists($small_img_path)) 
                     {
-                        @unlink($small_img_path);
-                        General::amazon_s3_delete($small_img_path);
+                        unlink($small_img_path);
                     }
                     if(file_exists($imagePath)) 
                     {
-                        @unlink($imagePath);
-                        General::amazon_s3_delete($imagePath);
+                        unlink($imagePath);
                     }
                     
                     return [
                         'type' => 'IMAGE_COMPRESS_ISSUE',
                     ];
                 }else{
-                    if(file_exists($imagePath)) 
-                    {
-                        unlink($imagePath);
-                    }
-                    if(file_exists($webpPath)) 
-                    {
-                        unlink($webpPath);
-                    }
                     
                     return [
                         'type' => 'SUCCESS',
                         'data' => ['vImage' => $originalName,'vWebpImage' => $originalImageNameWithoutExtension.'.webp'],
                     ];
                 }
-                if(file_exists($imagePath)) 
-                {
-                    unlink($imagePath);
-                }
-                if(file_exists($webpPath)) 
-                {
-                    unlink($webpPath);
-                }
             }else{
-                if(file_exists($imagePath)) 
-                {
-                    unlink($imagePath);
-                }
-                if(file_exists($webpPath)) 
-                {
-                    unlink($webpPath);
-                }
                 return [
                     'type'  => 'IMAGE_UPLOADED_ISSUE',
                 ];

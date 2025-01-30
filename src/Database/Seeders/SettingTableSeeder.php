@@ -67,7 +67,7 @@ class SettingTableSeeder extends Seeder
             [
                 'vName' => 'COMPANY_LOGO',
                 'vDesc' => 'Company Logo',
-                'vValue' => NULL,
+                'vValue' => 'logo.jpg',
                 'iSettingOrder' => 6,
                 'eConfigType' => 'Company',
                 'eDisplayType' => 'file',
@@ -78,7 +78,7 @@ class SettingTableSeeder extends Seeder
             [
                 'vName' => 'COMPANY_FAVICON',
                 'vDesc' => 'Company Favicon',
-                'vValue' => NULL,
+                'vValue' => 'favicon.png',
                 'iSettingOrder' => 7,
                 'eConfigType' => 'Company',
                 'eDisplayType' => 'file',
@@ -89,7 +89,7 @@ class SettingTableSeeder extends Seeder
             [
                 'vName' => 'COMPANY_FOOTER_LOGO',
                 'vDesc' => 'Company Footer Logo',
-                'vValue' => NULL,
+                'vValue' => 'footer_logo.png',
                 'iSettingOrder' => 8,
                 'eConfigType' => 'Company',
                 'eDisplayType' => 'file',
@@ -100,7 +100,7 @@ class SettingTableSeeder extends Seeder
             [
                 'vName' => 'COMPANY_WEBSITE',
                 'vDesc' => 'Company Website',
-                'vValue' => NULL,
+                'vValue' => 'banner_logo.png',
                 'iSettingOrder' => 9,
                 'eConfigType' => 'Company',
                 'eDisplayType' => 'text',
