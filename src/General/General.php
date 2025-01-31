@@ -11,7 +11,7 @@ use App\Models\admin\MetaModel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\Facades\Image; 
+use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 
  
@@ -219,62 +219,6 @@ class General
         return $user;
     }
 
-    static function compress_image($criteria)
-    {    
-
-        $image  = Image::make($criteria['imagePath']);
-        
-        if($image->filesize() <= 50000)
-        {
-            $compress = 100;
-        }
-        elseif($image->filesize() <= 500000 && $image->filesize() > 50000)
-        {
-            $compress = 80;
-        }else
-        {
-            $compress = 75;
-        }
-
-        $originalWidth  = $image->width();
-        $originalHeight = $image->height();
-
-        $smallPath      = $criteria['smallPath'];
-        $originalImageNameWithoutExtension = $criteria['ImageName'];
-
-        $minFileSize = 1 * 1024 * 1024; // 1 MB
-
-        if ($image->filesize() > $minFileSize) {
-            $targetWidth = $originalWidth;
-            $targetHeight = $originalHeight;
-
-            $maxFileSize = 2 * 1024; // 2 KB (converted from MB to KB)
-
-            while ($image->filesize() > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
-                $targetWidth -= round($originalWidth * 0.1);
-                $targetHeight -= round($originalHeight * 0.1);
-
-                if ($targetWidth > 0 && $targetHeight > 0) {
-                    $image->resize($targetWidth, $targetHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                } else {
-                    break;
-                }
-            }
-        }
-
-        $webpPath = $smallPath . '/' . $originalImageNameWithoutExtension . '.webp';
-        $image->save($webpPath, $compress);
-
-        $compressedImageSize = $image->filesize();
-             
-        return [
-            'webpPath' => $webpPath,
-            'fileSize' => $compressedImageSize
-        ];
-    }
-
 
     static function meta_info($criteria = '')
     {
@@ -355,13 +299,13 @@ class General
             if(file_exists($imagePath)){
                 
                
-                $image  = Image::make($imagePath);
-        
-                if($image->filesize() <= 50000)
+                $image  = Image::read($imagePath);
+                
+                if(filesize($imagePath) <= 50000)
                 {
                     $compress = 100;
                 }
-                elseif($image->filesize() <= 500000 && $image->filesize() > 50000)
+                elseif(filesize($imagePath) <= 500000 && filesize($imagePath) > 50000)
                 {
                     $compress = 80;
                 }else
@@ -373,13 +317,13 @@ class General
                 $originalHeight = $image->height();
                 $minFileSize = 1 * 1024 * 1024; 
 
-                if ($image->filesize() > $minFileSize) {
+                if (filesize($imagePath) > $minFileSize) {
                     $targetWidth = $originalWidth;
                     $targetHeight = $originalHeight;
 
                     $maxFileSize = 2 * 1024;
 
-                    while ($image->filesize() > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
+                    while (filesize($imagePath) > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
                         $targetWidth -= round($originalWidth * 0.1);
                         $targetHeight -= round($originalHeight * 0.1);
 
@@ -396,7 +340,7 @@ class General
                 $webpPath = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';
                 $image->save($webpPath, $compress);
                
-                $compressedImageSize = $image->filesize();
+                $compressedImageSize = filesize($imagePath);
                 if($compressedImageSize <= 5 * 1024) 
                 {   
                     $small_img_path = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';

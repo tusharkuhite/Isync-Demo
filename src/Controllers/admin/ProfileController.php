@@ -25,10 +25,6 @@ class ProfileController extends Controller
                 $criteria["iUserId"]        = Session::get('iUserId');
                 $data['admin']              = UserModel::get_by_id($criteria);
 
-                $criteria                   = array();
-                $criteria["iUserId"]        = Session::get('iUserId');
-                $data['company']            = CompanyModel::get_by_id($criteria);
-
                 $vUniqueCode                = Session::get('vUniqueCode');
                 if ($data['admin'] != null  && $data['admin']->vUniqueCode == $vUniqueCode) {
                     if (!empty($data['admin'])) {
