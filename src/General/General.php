@@ -11,7 +11,7 @@ use App\Models\admin\MetaModel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Facades\Image; 
 use Illuminate\Support\Facades\Auth;
 
  

@@ -132,7 +132,7 @@ return new class extends Migration
 
 
 
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('iUserId'); // Primary key, auto-incrementing bigint
             $table->string('vUniqueCode', 255)->nullable()->index(); // Unique code, nullable, indexed
             $table->bigInteger('iRoleId')->unsigned()->nullable()->index(); // Role ID, unsigned bigint, nullable, indexed
@@ -177,6 +177,6 @@ return new class extends Migration
         Schema::dropIfExists('pagination');
         Schema::dropIfExists('role');
         Schema::dropIfExists('setting');
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('users');
     }
 };

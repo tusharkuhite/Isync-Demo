@@ -8,7 +8,7 @@ class UserTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('user')->insert([
+        DB::table('users')->insert([
             [
                 'vUniqueCode' => 'U12345',
                 'iRoleId' => 1,

@@ -23,10 +23,6 @@ class DemoServiceProvider extends ServiceProvider
             __DIR__ . '/General/' => app_path('Libraries/')
         ], 'generate-demo-files');
 
-        $this->publishes([
-            __DIR__.'/../config/image.php' => config_path('image.php'),
-        ]);
-
         if ($this->app->runningInConsole() && $this->isPublishing('generate-demo-files')) {
             $this->updateWebRoutes();
             $this->replaceContentInUserModel();

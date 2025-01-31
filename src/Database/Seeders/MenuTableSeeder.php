@@ -53,6 +53,17 @@ class MenuTableSeeder extends Seeder
                 'eDelete' => 'No',
                 'dtAddedDate' => now(),
             ],
+            [
+                'vUniqueCode' => '8f8b613e8f9f66931d7c80834fth583a55ed005ac2239c905cc9c217713535dcc9f0f895fb98ab9159f51fd0297e236d',
+                'vMenu' => 'Profile',
+                'iRoleId' => 1,
+                'eStatus' => 'Active',
+                'vCode' => '',
+                'eFeature' => 'Yes',
+                'iOrder'    => 2,
+                'eDelete' => 'No',
+                'dtAddedDate' => now(),
+            ]
         ]);
     }
 }

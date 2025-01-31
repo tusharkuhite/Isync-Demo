@@ -71,6 +71,15 @@ class PermissionTableSeeder extends Seeder
                 'eWrite' => 'Yes',
                 'eDelete' => 'Yes',
                 'dtAddedDate' => now(),
+            ],
+            [
+                'vUniqueCode' => '95ab283f1a08cd488b83b5erh46e41a7b9720236ebc09a55748d25fe85d83a2208e296a067a37563370ded05f5a3bf3ec',
+                'iRoleId' => 1,
+                'iModuleId' => 8,
+                'eRead' => 'Yes',
+                'eWrite' => 'Yes',
+                'eDelete' => 'Yes',
+                'dtAddedDate' => now(),
             ]
         ]);
     }

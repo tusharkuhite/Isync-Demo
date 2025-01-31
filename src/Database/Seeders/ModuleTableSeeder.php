@@ -92,6 +92,18 @@ class ModuleTableSeeder extends Seeder
                 'eFeature'    => 'Yes',
                 'eDelete'     => 'No',
                 'dtAddedDate' => now(),
+            ],
+            [
+                'vUniqueCode' => 'cf268b0a12b85aa2f1d6225a8ab6c318654944b156963e03b5d37ea807d70a12b6d767d2f8ed5d21a44b0e5886680cb9',
+                'iRoleId'     => 1,
+                'iMenuId'     => 5,
+                'vModule'     => 'Profile',
+                'vController' => 'ProfileController',
+                'eStatus'     => 'Active',
+                'iOrder'      => 1,
+                'eFeature'    => 'Yes',
+                'eDelete'     => 'No',
+                'dtAddedDate' => now(),
             ]
         ]);
     }
