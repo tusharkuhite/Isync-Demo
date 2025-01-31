@@ -4,7 +4,7 @@ namespace Isync\Demo;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use MyPackage\Commands\IsyncCommand;
+use Isync\Demo\Commands\IsyncDemoCommand;
 
 class DemoServiceProvider extends ServiceProvider
 {
@@ -30,7 +30,7 @@ class DemoServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                IsyncCommand::class,
+                IsyncDemoCommand::class,
             ]);
         }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace MyPackage\Commands;
+namespace Isync\Demo\Commands;
 
 use Illuminate\Console\Command;
 
-class IsyncCommand extends Command
+class IsyncDemoCommand extends Command
 {
     // The command signature used to call it in the terminal
     protected $signature = 'isync:demo';
