@@ -25,7 +25,7 @@ $userUniqueCode = session('vUniqueCode');
                         <img style="width: 100px; border-radius: 10px;margin-top: 7px; display:none;" class="vImage_preview_img" id="vImage_preview"
                                 src="#" alt="your image" />
 
-                       @if (!empty($admin->vWebpImage) && General::amazonS3FileExist("uploads/user/user_small/" . $admin->vWebpImage))                       
+                       @if (!empty($admin->vWebpImage) && file_exists(public_path("uploads/user/user_small/" . $admin->vWebpImage)))                       
                         <img style="width: 100px; border-radius: 10px;margin-top: 7px;" alt="user-avatar" class=" rounded " id="image_display"
                                 value="@if(old('vWebpImage') == 'vWebpImage') @endif"
                                 src="{{asset('uploads/user/user_small/'.$admin->vWebpImage)}}">

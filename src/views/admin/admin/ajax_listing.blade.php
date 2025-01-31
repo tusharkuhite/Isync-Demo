@@ -18,7 +18,7 @@
                     @endif
 
                     <div class="image-box">
-                        @if (!empty($value->vWebpImage) && General::amazonS3FileExist('uploads/user/user_small/' . $value->vWebpImage))
+                        @if (!empty($value->vWebpImage) && file_exists(public_path('uploads/user/user_small/' . $value->vWebpImage)))
                             <a href="{{ asset('uploads/user/user_small/' . $value->vWebpImage)}}" target="_blank">
                                 <img class="card-img-top"
                                     src="{{ asset('uploads/user/user_small/' . $value->vWebpImage)}}"

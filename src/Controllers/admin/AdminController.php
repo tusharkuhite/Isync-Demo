@@ -30,7 +30,7 @@ class AdminController extends Controller
         $vUniqueCode    = $request->vUniqueCode;
         $eStatus        = $request->eStatus;
         $eDelete        = $request->eDelete;
-        $vColumn        = "user.iUserId";
+        $vColumn        = "users.iUserId";
         $vOrder         = "DESC";
         $eStatus_search = $request->eStatus_search;
         $eDeleted       = $request->eDeleted;
