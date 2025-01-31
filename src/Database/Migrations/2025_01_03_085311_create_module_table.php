@@ -22,7 +22,6 @@ return new class extends Migration
             $table->dateTime('dtAddedDate')->nullable(); // Added date, datetime
             $table->dateTime('dtUpdatedDate')->nullable(); // Updated date, datetime
 
-            // Add any necessary indexes
             $table->index('iRoleId');
             $table->index('iMenuId');
             $table->index('eStatus');
@@ -146,7 +145,6 @@ return new class extends Migration
             $table->string('vPhone', 25)->nullable(); // Phone number, varchar(25), nullable
             $table->string('vAuthCode', 255)->nullable(); // Auth code, varchar(255), nullable
             $table->enum('eStatus', ['Active', 'Inactive', 'Pending'])->default('Active')->index(); // Status, enum, default 'Active', indexed
-            $table->enum('eFeature', ['Yes', 'No'])->default('No')->index(); // Feature flag, enum, default 'No', indexed
             $table->enum('eDelete', ['Yes', 'No'])->default('No')->index(); // Delete flag, enum, default 'No', indexed
             $table->dateTime('dtAddedDate')->nullable()->index(); // Added date, datetime, nullable, indexed
             $table->dateTime('dtUpdatedDate')->nullable()->index(); // Updated date, datetime, nullable, indexed
