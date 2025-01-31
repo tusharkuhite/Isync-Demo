@@ -15,7 +15,7 @@ class IsyncDemoCommand extends Command
     public function handle()
     {
         $this->call('migrate', [
-            '--path' => 'Isync/Demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
+            '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
 
         // Publish service provider files
