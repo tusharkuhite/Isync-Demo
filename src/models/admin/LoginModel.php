@@ -10,11 +10,11 @@ class LoginModel extends Model
 {
     use HasFactory;
     
-    protected $table = 'user';
+    protected $table = 'users';
 
      public static function  login($criteria)
     {
-        $SQL = DB::table("user");
+        $SQL = DB::table("users");
         $SQL->where('vEmail',$criteria['vEmail'])->where('vPassword',$criteria['vPassword']);
         $result = $SQL->get();
         return $result->first();
@@ -22,7 +22,7 @@ class LoginModel extends Model
 
     public static function email_exist($criteria = array())
     {
-        $SQL = DB::table("user");
+        $SQL = DB::table("users");
         if($criteria['vEmail'])
         {
             $SQL->where("vEmail", $criteria["vEmail"]);
@@ -34,14 +34,14 @@ class LoginModel extends Model
     }
 
     public static function UpdateData(array $where = [], array $data = []){
-        $vUniqueCode = DB::table('user');
+        $vUniqueCode = DB::table('users');
         $vUniqueCode->where('vUniqueCode',$where['vUniqueCode'])->update($data);
         return $vUniqueCode;
     }
 
     public static function authentication($criteria = array())
     {
-        $SQL = DB::table("user");
+        $SQL = DB::table("users");
         if($criteria['vAuthCode'])
         {
             $SQL->where("vAuthCode", $criteria["vAuthCode"]);
