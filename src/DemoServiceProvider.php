@@ -4,7 +4,6 @@ namespace Isync\Demo;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\Facades\Image;
 
 
 class DemoServiceProvider extends ServiceProvider
@@ -14,7 +13,6 @@ class DemoServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/views', 'demo');
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
-        $this->app->alias(Image::class, 'Image');
         
         $this->publishes([
             __DIR__ . '/models' => app_path('Models'),
@@ -69,8 +67,6 @@ class DemoServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->register(\Intervention\Image\ImageServiceProvider::class);
-
         if (file_exists(__DIR__ . '/helpers.php')) {
             require_once __DIR__ . '/helpers.php';
         }
