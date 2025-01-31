@@ -20,13 +20,15 @@ class DemoServiceProvider extends ServiceProvider
             __DIR__ . '/views/layouts' => resource_path('views/layouts'),
             __DIR__ . '/views/admin' => resource_path('views/admin'),
             __DIR__ . '/Assets/' => public_path(),
-            __DIR__ . '/General/' => app_path('Libraries/')
+            __DIR__ . '/General/' => app_path('Libraries/'),
+            __DIR__ . '/routes/generatedRoute.php' => base_path('routes/web.php'),
+            __DIR__ . '/models/User.php' => app_path('Models/User.php')
         ], 'generate-demo-files');
 
-        if ($this->app->runningInConsole() && $this->isPublishing('generate-demo-files')) {
-            $this->updateWebRoutes();
-            $this->replaceContentInUserModel();
-        }
+        // if ($this->isPublishing('generate-demo-files')) {
+        //     $this->updateWebRoutes();
+        //     $this->replaceContentInUserModel();
+        // }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -36,36 +38,36 @@ class DemoServiceProvider extends ServiceProvider
 
     }
 
-    private function updateWebRoutes()
-    {
-        $generatedRoutePath = __DIR__ . '/routes/generatedRoute.php';
-        $webRoutePath = base_path('routes/web.php');
+    // private function updateWebRoutes()
+    // {
+    //     $generatedRoutePath = __DIR__ . '/routes/generatedRoute.php';
+    //     $webRoutePath = base_path('routes/web.php');
 
-        if (File::exists($webRoutePath)) {
+    //     if (File::exists($webRoutePath)) {
             
-            $newContent = File::get($generatedRoutePath);
-            File::put($webRoutePath, $newContent);  
+    //         $newContent = File::get($generatedRoutePath);
+    //         File::put($webRoutePath, $newContent);  
 
-        } 
-    }
+    //     } 
+    // }
 
-    private function isPublishing($tag)
-    {
-        return in_array('vendor:publish', request()->server('argv', [])) &&
-            in_array('--tag=' . $tag, request()->server('argv', []));
-    }
+    // private function isPublishing($tag)
+    // {
+    //     return in_array('vendor:publish', request()->server('argv', [])) &&
+    //         in_array('--tag=' . $tag, request()->server('argv', []));
+    // }
     
-    private function replaceContentInUserModel()
-    {
-        $userModelPath = app_path('Models/User.php');
+    // private function replaceContentInUserModel()
+    // {
+    //     $userModelPath = app_path('Models/User.php');
 
-        if (File::exists($userModelPath)) {
+    //     if (File::exists($userModelPath)) {
             
-            $newContent = File::get(__DIR__ . '/models/User.php');
-            File::put($userModelPath, $newContent);  
+    //         $newContent = File::get(__DIR__ . '/models/User.php');
+    //         File::put($userModelPath, $newContent);  
 
-        } 
-    }
+    //     } 
+    // }
 
     public function register()
     {

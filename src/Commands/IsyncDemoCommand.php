@@ -18,7 +18,8 @@ class IsyncDemoCommand extends Command
         ]);
         
         $this->call('vendor:publish', [
-            '--tag' => 'generate-demo-files'
+            '--tag' => 'generate-demo-files',
+            '--force' => true
         ]);
     
         $this->call('db:seed', [
