@@ -4,18 +4,14 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\admin\ModuleModel;
-use App\Models\admin\PaginationModel;
 use App\Models\admin\MenuModel;
 use App\Models\admin\MetaModel;
 use App\Models\admin\RoleModel;
 use App\Libraries\Paginator;
 use App\Libraries\General;
-use Session;
-use Validator;
-use Route;
-use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Route;
 
 class ModuleController extends Controller
 {
