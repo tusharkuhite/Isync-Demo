@@ -1,29 +1,5 @@
 <?php
 namespace App\Libraries;
-<<<<<<< HEAD
-use App\Models\admin\RoleModel;
-use App\Models\admin\UserModel;
-use App\Models\admin\SettingModel;
-use App\Models\admin\ModuleModel;
-use Illuminate\Support\Facades\Route;
-use App\Models\admin\PermissionModel;
-use App\Models\admin\MenuModel;
-use App\Models\admin\ModuleLabelModel;
-use App\Models\admin\PaginationModel;
-use App\Models\admin\MetaModel;
-use App\Models\admin\OgMetaModel;
-use App\Models\admin\LogModel;
-use App\Models\admin\LabelsModel;
-use App\Models\front\FrontHowItWorkModel;
-use Illuminate\Support\Facades\Storage;
-use Aws\Credentials\Credentials;
-use Aws\S3\S3Client;
-use Aws\S3\Exception\S3Exception;
-
-use Mail;
-use Session;
-use Intervention\Image\Facades\Image;
-=======
 
 use App\Models\admin\RoleModel;
 use App\Models\admin\SettingModel;
@@ -37,7 +13,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Auth;
->>>>>>> 594515e (testing)
 
  
 class General
@@ -244,65 +219,6 @@ class General
         return $user;
     }
 
-<<<<<<< HEAD
-    static function compress_image($criteria)
-    {    
-
-        $image  = Image::make($criteria['imagePath']);
-        
-        if($image->filesize() <= 50000)
-        {
-            $compress = 100;
-        }
-        elseif($image->filesize() <= 500000 && $image->filesize() > 50000)
-        {
-            $compress = 80;
-        }else
-        {
-            $compress = 75;
-        }
-
-        $originalWidth  = $image->width();
-        $originalHeight = $image->height();
-
-        $smallPath      = $criteria['smallPath'];
-        $originalImageNameWithoutExtension = $criteria['ImageName'];
-
-        $minFileSize = 1 * 1024 * 1024; // 1 MB
-
-        if ($image->filesize() > $minFileSize) {
-            $targetWidth = $originalWidth;
-            $targetHeight = $originalHeight;
-
-            $maxFileSize = 2 * 1024; // 2 KB (converted from MB to KB)
-
-            while ($image->filesize() > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
-                $targetWidth -= round($originalWidth * 0.1);
-                $targetHeight -= round($originalHeight * 0.1);
-
-                if ($targetWidth > 0 && $targetHeight > 0) {
-                    $image->resize($targetWidth, $targetHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                } else {
-                    break;
-                }
-            }
-        }
-
-        $webpPath = $smallPath . '/' . $originalImageNameWithoutExtension . '.webp';
-        $image->save($webpPath, $compress);
-
-        $compressedImageSize = $image->filesize();
-             
-        return [
-            'webpPath' => $webpPath,
-            'fileSize' => $compressedImageSize
-        ];
-    }
-
-=======
->>>>>>> 594515e (testing)
 
     static function meta_info($criteria = '')
     {
@@ -312,17 +228,6 @@ class General
         }
     }
 
-<<<<<<< HEAD
-    static function ogmeta_info($criteria = '')
-    {
-        if(!empty($criteria)){
-            $meta = OgMetaModel::get_by_id($criteria);
-            return $meta;
-        }
-    }
-
-=======
->>>>>>> 594515e (testing)
     static function check_module_permission(){
         $criteria                = array();
         $criteria['vController'] = class_basename(Route::current()->controller);
@@ -390,27 +295,10 @@ class General
         {
             $image->move($original_image_path, $originalName);
             $imagePath = $original_image_path . '/' . $originalName;
-<<<<<<< HEAD
-            // dd($imagePath);
-            $image_type    = $image->getClientMimeType();
-           General::amazon_s3_upload($imagePath,$image_type);
-        //    dd(General::getS3url($imagePath));
-           
-=======
->>>>>>> 594515e (testing)
 
             if(file_exists($imagePath)){
                 
                
-<<<<<<< HEAD
-                $image  = Image::make($imagePath);
-        
-                if($image->filesize() <= 50000)
-                {
-                    $compress = 100;
-                }
-                elseif($image->filesize() <= 500000 && $image->filesize() > 50000)
-=======
                 $image  = Image::read($imagePath);
                 
                 if(filesize($imagePath) <= 50000)
@@ -418,7 +306,6 @@ class General
                     $compress = 100;
                 }
                 elseif(filesize($imagePath) <= 500000 && filesize($imagePath) > 50000)
->>>>>>> 594515e (testing)
                 {
                     $compress = 80;
                 }else
@@ -430,21 +317,13 @@ class General
                 $originalHeight = $image->height();
                 $minFileSize = 1 * 1024 * 1024; 
 
-<<<<<<< HEAD
-                if ($image->filesize() > $minFileSize) {
-=======
                 if (filesize($imagePath) > $minFileSize) {
->>>>>>> 594515e (testing)
                     $targetWidth = $originalWidth;
                     $targetHeight = $originalHeight;
 
                     $maxFileSize = 2 * 1024;
 
-<<<<<<< HEAD
-                    while ($image->filesize() > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
-=======
                     while (filesize($imagePath) > $maxFileSize && $targetWidth > 0 && $targetHeight > 0) {
->>>>>>> 594515e (testing)
                         $targetWidth -= round($originalWidth * 0.1);
                         $targetHeight -= round($originalHeight * 0.1);
 
@@ -460,79 +339,31 @@ class General
 
                 $webpPath = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';
                 $image->save($webpPath, $compress);
-<<<<<<< HEAD
-                
-                General::amazon_s3_upload($webpPath,'image/webp');
-               
-                $compressedImageSize = $image->filesize();
-=======
                
                 $compressedImageSize = filesize($imagePath);
->>>>>>> 594515e (testing)
                 if($compressedImageSize <= 5 * 1024) 
                 {   
                     $small_img_path = $compress_image_path . '/' . $originalImageNameWithoutExtension . '.webp';
                     if(file_exists($small_img_path)) 
                     {
-<<<<<<< HEAD
-                        @unlink($small_img_path);
-                        General::amazon_s3_delete($small_img_path);
-                    }
-                    if(file_exists($imagePath)) 
-                    {
-                        @unlink($imagePath);
-                        General::amazon_s3_delete($imagePath);
-=======
                         unlink($small_img_path);
                     }
                     if(file_exists($imagePath)) 
                     {
                         unlink($imagePath);
->>>>>>> 594515e (testing)
                     }
                     
                     return [
                         'type' => 'IMAGE_COMPRESS_ISSUE',
                     ];
                 }else{
-<<<<<<< HEAD
-                    if(file_exists($imagePath)) 
-                    {
-                        unlink($imagePath);
-                    }
-                    if(file_exists($webpPath)) 
-                    {
-                        unlink($webpPath);
-                    }
-=======
->>>>>>> 594515e (testing)
                     
                     return [
                         'type' => 'SUCCESS',
                         'data' => ['vImage' => $originalName,'vWebpImage' => $originalImageNameWithoutExtension.'.webp'],
                     ];
                 }
-<<<<<<< HEAD
-                if(file_exists($imagePath)) 
-                {
-                    unlink($imagePath);
-                }
-                if(file_exists($webpPath)) 
-                {
-                    unlink($webpPath);
-                }
             }else{
-                if(file_exists($imagePath)) 
-                {
-                    unlink($imagePath);
-                }
-                if(file_exists($webpPath)) 
-                {
-                    unlink($webpPath);
-                }
-=======
-            }else{
->>>>>>> 594515e (testing)
                 return [
                     'type'  => 'IMAGE_UPLOADED_ISSUE',
                 ];

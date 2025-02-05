@@ -17,11 +17,7 @@ $roles  =\App\Libraries\General::get_role();
                         <img style="margin-top: 7px; width:100px; display:none;" class="vImage_preview_img" id="vImage_preview"
                                 src="#" alt="your image" />
 
-<<<<<<< HEAD
-                       @if (!empty($admin->vWebpImage) && General::amazonS3FileExist("uploads/user/user_small/" . $admin->vWebpImage))                       
-=======
                        @if (!empty($admin->vWebpImage) && file_exists(public_path("uploads/user/user_small/" . $admin->vWebpImage)))                       
->>>>>>> 594515e (testing)
                         <img style="margin-top: 7px;" height="100px" width="100px" alt="user-avatar" class=" rounded profile-img" id="image_display"
                                 value="@if(old('vWebpImage') == 'vWebpImage') @endif"
                                 src="{{asset('uploads/user/user_small/'.$admin->vWebpImage)}}">
@@ -240,10 +236,6 @@ vImage.onchange = evt => {
 }
 // ----------------- get link code end ----------------->
 </script>
-<<<<<<< HEAD
-</script>
-=======
->>>>>>> 594515e (testing)
 <script type="text/javascript">
    $(document).on('keyup', '#vPhone', function() {
        vPhone = $(this).val();
@@ -272,11 +264,7 @@ vImage.onchange = evt => {
        var Emailregex  = /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
        var Passwordregex   = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%&!]).{8,}$/; 
        var error       = false;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 594515e (testing)
        if (vFirstName.length == 0) {
            $("#vFirstName_error").show();
            error = true;
@@ -293,31 +281,13 @@ vImage.onchange = evt => {
            $("#vPhone_error").show();
            error = true;
        } else if (vPhone.length < 10) {
-<<<<<<< HEAD
-           $("#vPhone_error").hide();
-           $('#vPhone_valid_error').show();
-           error = true;
-=======
            error = true;
            $("#vPhone_error").hide();
            $('#vPhone_valid_error').show();
->>>>>>> 594515e (testing)
        } else {
            $("#vPhone_error").hide();
            $('#vPhone_valid_error').hide();
        }
-<<<<<<< HEAD
-
-       if($('#email_unique_error').css('display') == 'block')
-       {
-           $("#email_unique_error").show();
-            error = true;
-       }else{
-
-           $("#email_unique_error").hide();
-           error = false;
-       }
-=======
        
        if($('#email_unique_error').css('display') == 'block')
        {
@@ -327,7 +297,6 @@ vImage.onchange = evt => {
             $("#email_unique_error").hide();
         }
        
->>>>>>> 594515e (testing)
        @if($roles->vRole == "Admin")
        if (eStatus.length == 0) {
            error = true;
@@ -336,10 +305,7 @@ vImage.onchange = evt => {
            $("#eStatus_error").hide();
        }
        @endif
-<<<<<<< HEAD
-=======
        
->>>>>>> 594515e (testing)
        if (vEmail.length == 0) {
            $("#email_error").show();
            $('#email_valid_error').hide();
@@ -354,43 +320,6 @@ vImage.onchange = evt => {
            }
        }
 
-<<<<<<< HEAD
-      @if(!isset($admin))
-        if (vPassword.length == 0) {
-            $("#vPassword_error").show();
-            error = true;
-        } else {
-            $("#vPassword_error").hide();
-            if (!vPassword.match(Passwordregex)) {
-                $("#password_valid_error").show();
-                error = true;
-            } else {
-                $("#password_valid_error").hide();
-            }
-        }
-
-        if (vPassword2.length == 0) {
-            $("#vPassword2_error").show();
-            $("#vPassword2_same_error").hide();
-            error = true;
-        } else {
-            if (vPassword.length == 0) {
-                $("#vPassword2_error").hide();
-            }
-        }
-
-        if (vPassword.length != 0 && vPassword2.length != 0) {
-            if (vPassword != vPassword2) {
-                $("#vPassword2_same_error").show();
-                $("#vPassword2_error").hide();
-                return false;
-            } else {
-                $("#vPassword2_same_error").hide();
-                $("#vPassword2_error").hide();
-            }
-        }
-    @endif
-=======
         @if(!isset($admin))
             if (vPassword.length == 0) {
                 $("#vPassword_error").show();
@@ -428,7 +357,6 @@ vImage.onchange = evt => {
             }
         @endif
     
->>>>>>> 594515e (testing)
 
     if (error == true) {
          return false;

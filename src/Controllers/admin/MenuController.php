@@ -4,24 +4,10 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Hash;
-use App\Models\admin\MenuModel;
-use App\Models\admin\PaginationModel;
-use App\Models\admin\RoleModel;
-use App\Models\admin\ModuleModel;
-use App\Models\admin\MetaModel;
-use App\Libraries\Paginator;
-use App\Libraries\General;
-use Session;
-use Validator;
-use Intervention\Image\Facades\Image;
-=======
 use App\Models\admin\MenuModel;
 use App\Models\admin\RoleModel;
 use App\Libraries\Paginator;
 use App\Libraries\General;
->>>>>>> 594515e (testing)
 
 class MenuController extends Controller
 {

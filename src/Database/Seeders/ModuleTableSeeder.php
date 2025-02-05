@@ -92,8 +92,6 @@ class ModuleTableSeeder extends Seeder
                 'eFeature'    => 'Yes',
                 'eDelete'     => 'No',
                 'dtAddedDate' => now(),
-<<<<<<< HEAD
-=======
             ],
             [
                 'vUniqueCode' => 'cf268b0a12b85aa2f1d6225a8ab6c318654944b156963e03b5d37ea807d70a12b6d767d2f8ed5d21a44b0e5886680cb9',
@@ -106,7 +104,6 @@ class ModuleTableSeeder extends Seeder
                 'eFeature'    => 'Yes',
                 'eDelete'     => 'No',
                 'dtAddedDate' => now(),
->>>>>>> 594515e (testing)
             ]
         ]);
     }

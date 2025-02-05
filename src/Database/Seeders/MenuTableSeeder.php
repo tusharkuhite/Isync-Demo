@@ -53,8 +53,6 @@ class MenuTableSeeder extends Seeder
                 'eDelete' => 'No',
                 'dtAddedDate' => now(),
             ],
-<<<<<<< HEAD
-=======
             [
                 'vUniqueCode' => '8f8b613e8f9f66931d7c80834fth583a55ed005ac2239c905cc9c217713535dcc9f0f895fb98ab9159f51fd0297e236d',
                 'vMenu' => 'Profile',
@@ -66,7 +64,6 @@ class MenuTableSeeder extends Seeder
                 'eDelete' => 'No',
                 'dtAddedDate' => now(),
             ]
->>>>>>> 594515e (testing)
         ]);
     }
 }

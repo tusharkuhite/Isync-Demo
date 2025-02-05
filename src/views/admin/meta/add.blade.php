@@ -164,11 +164,7 @@
         if(vController.length != 0){
             $("#vMethod").html('');
             $.ajax({
-<<<<<<< HEAD
                 url:"{{route('get-method-by-controller')}}",
-=======
-                url:"{{route('admin.meta.controller-method')}}",
->>>>>>> 594515e (testing)
                 type: "POST",
                 data: {
                     vController: vController,
@@ -202,11 +198,7 @@
         if(vController.length != 0){
             $("#vMethod").html('');
             $.ajax({
-<<<<<<< HEAD
                 url:"{{route('get-method-by-controller')}}",
-=======
-                url:"{{route('admin.meta.controller-method')}}",
->>>>>>> 594515e (testing)
                 type: "POST",
                 data: {
                     vController: vController,

@@ -13,21 +13,6 @@ use Session;
 class SettingController extends Controller
 {
     public function index()
-<<<<<<< HEAD
-    {   
-
-        $data  = General::check_module_permission();
-        
-        if($data["permission"] != null && $data["permission"]->eRead == "Yes")
-        {
-            return view('admin.setting.listing');
-
-        }else{
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        } 
-        
-=======
     {
 
         $data  = General::check_module_permission();
@@ -38,7 +23,6 @@ class SettingController extends Controller
 
             return redirect()->route('admin.dashboard')->withError('can not access without permission.');
         }
->>>>>>> 594515e (testing)
     }
 
     public function store(Request $request)
@@ -64,34 +48,12 @@ class SettingController extends Controller
                     ]);
 
                     $imageName = $image;
-<<<<<<< HEAD
-                    $path = 'uploads/logo';
-                    $request->file($value->vName)->move($path, $imageName);
-                    $imagePath = $path.'/'.$imageName;
-        
-                    $image_type    = $request->file($value->vName)->getClientMimeType();
-                    General::amazon_s3_upload($imagePath,$image_type);
-                   
-=======
                     $path = public_path('uploads/logo');
                     $request->file($value->vName)->move($path, $imageName);
->>>>>>> 594515e (testing)
 
                     $path2 = public_path('admin/assets/img/favicon');
                     $existingImagePath = $path2.'/'.$image;
 
-<<<<<<< HEAD
-                    General::amazon_s3_delete($existingImagePath);
-
-                    copy($path.'/'.$image, $path2.'/'.$image);
-                    chmod($path2.'/'.$image, 0644);
-                    
-                    $settings['vValue'] = $image;
-                    $where = ["vName" => $value->vName];
-                    SettingModel::setting_update($where, $settings);
-                    unlink($imagePath);
-
-=======
                     if (file_exists($existingImagePath)) {
                         unlink($existingImagePath);
                     }
@@ -107,7 +69,6 @@ class SettingController extends Controller
                     $DataBeforeUpdate          = SettingModel::get_by_id($criteria);
 
                     SettingModel::setting_update($where, $settings);
->>>>>>> 594515e (testing)
                 }
             }
             else if ($value->vName == 'COMPANY_LOGO') {
@@ -120,25 +81,6 @@ class SettingController extends Controller
                     ]);
 
                     $imageName = 'logo_' . time() . '.' . $request->file('COMPANY_LOGO')->getClientOriginalExtension();
-<<<<<<< HEAD
-                    $path = 'uploads/logo';
-                    $request->file('COMPANY_LOGO')->move($path, $imageName);
-                    $imagePath = $path.'/'.$imageName;
-                    $image_type    = $request->file('COMPANY_LOGO')->getClientMimeType();
-                    General::amazon_s3_upload($imagePath,$image_type);
-                    
-                    if(!empty($setting->vValue)){
-                        $existingImagePath = $path.'/'.$setting->vValue;
-                        if(General::amazonS3FileExist($existingImagePath)){
-                            General::amazon_s3_delete($existingImagePath);
-                        }
-                    }
-
-                    unlink($imagePath);
-                    $settings['vValue'] = $imageName;
-
-                    $where = array("vName" => $value->vName);
-=======
                     $path = public_path('uploads/logo');
 
                     $request->file('COMPANY_LOGO')->move($path, $imageName);
@@ -159,7 +101,6 @@ class SettingController extends Controller
                     $criteria['iSettingId']  = $value->iSettingId;
                     $DataBeforeUpdate          = SettingModel::get_by_id($criteria);
 
->>>>>>> 594515e (testing)
                     SettingModel::setting_update($where, $settings);
                 }
             }
@@ -173,32 +114,16 @@ class SettingController extends Controller
                             'COMPANY_FOOTER_LOGO' => 'required|mimes:png,jpg,jpeg|max:2048'
                         ]);
                         $imageName      = $image;
-<<<<<<< HEAD
-                        $path           = 'uploads/logo';
-                        $request[$value->vName]->move($path, $imageName);
-
-                        $imagePath = $path.'/'.$imageName;
-                        $image_type    = $request[$value->vName]->getClientMimeType();
-                        General::amazon_s3_upload($imagePath,$image_type);
-                        
-                        
-                        unlink($imagePath);
-                        
-=======
                         $path           = public_path('uploads/logo');
                         $request[$value->vName]->move($path, $imageName);
->>>>>>> 594515e (testing)
                     }
                     $settings['vValue'] = $imageName;
 
                     $where = array("vName" => $value->vName);
-<<<<<<< HEAD
-=======
                     $criteria                 = array();
                     $criteria['iSettingId']  = $value->iSettingId;
                     $DataBeforeUpdate          = SettingModel::get_by_id($criteria);
 
->>>>>>> 594515e (testing)
                     SettingModel::setting_update($where, $settings);
                 }
             }
@@ -212,29 +137,16 @@ class SettingController extends Controller
                             'COMPANY_BANNER_LOGO' => 'required|mimes:png,jpg,jpeg|max:2048'
                         ]);
                         $imageName      = $image;
-<<<<<<< HEAD
-                        $path           = 'uploads/logo';
-                        $request[$value->vName]->move($path, $imageName);
-
-                        $imagePath = $path.'/'.$imageName;
-                        $image_type    = $request[$value->vName]->getClientMimeType();
-                        General::amazon_s3_upload($imagePath,$image_type);
-                        unlink($imagePath);
-=======
                         $path           = public_path('uploads/logo');
                         $request[$value->vName]->move($path, $imageName);
->>>>>>> 594515e (testing)
                     }
                     $settings['vValue'] = $imageName;
 
                     $where = array("vName" => $value->vName);
-<<<<<<< HEAD
-=======
                     $criteria                 = array();
                     $criteria['iSettingId']  = $value->iSettingId;
                     $DataBeforeUpdate          = SettingModel::get_by_id($criteria);
 
->>>>>>> 594515e (testing)
                     SettingModel::setting_update($where, $settings);
                 }
             }else{
@@ -243,12 +155,6 @@ class SettingController extends Controller
                
                 $where = array("vName" => $value->vName);
                
-<<<<<<< HEAD
-                SettingModel::setting_update($where, $settings);
-            }   
-        }
-        return redirect()->back()->withSuccess("Data updated successfully");
-=======
                 $criteria                 = array();
                     $criteria['iSettingId']  = $value->iSettingId;
                     $DataBeforeUpdate          = SettingModel::get_by_id($criteria);
@@ -257,22 +163,14 @@ class SettingController extends Controller
             }   
         }
         return redirect()->back()->withSuccess(__('message.TOASTR_MSG_DATA_UPDATED'));
->>>>>>> 594515e (testing)
     }
 
     public function edit($eConfigType)
     {
 
-<<<<<<< HEAD
-      $data  = General::check_module_permission();
-        
-        if($data["permission"] != null && $data["permission"]->eRead == "Yes")
-        {
-=======
         $data  = General::check_module_permission();
 
         if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
->>>>>>> 594515e (testing)
             $data['eConfigType'] = $eConfigType;
 
             $criteria = array();
@@ -280,22 +178,11 @@ class SettingController extends Controller
             $criteria['eConfigType'] = $eConfigType;
 
             $data['settings'] = SettingModel::get_all_settings($criteria);
-<<<<<<< HEAD
-            
-            return view('admin.setting.add')->with($data);
-
-        }else{
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        } 
-       
-=======
 
             return view('admin.setting.add')->with($data);
         } else {
 
             return redirect()->route('admin.dashboard')->withError('can not access without permission.');
         }
->>>>>>> 594515e (testing)
     }
 }

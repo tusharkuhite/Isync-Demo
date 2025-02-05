@@ -22,10 +22,6 @@ return new class extends Migration
             $table->dateTime('dtAddedDate')->nullable(); // Added date, datetime
             $table->dateTime('dtUpdatedDate')->nullable(); // Updated date, datetime
 
-<<<<<<< HEAD
-            // Add any necessary indexes
-=======
->>>>>>> 594515e (testing)
             $table->index('iRoleId');
             $table->index('iMenuId');
             $table->index('eStatus');
@@ -135,11 +131,7 @@ return new class extends Migration
 
 
 
-<<<<<<< HEAD
-        Schema::create('user', function (Blueprint $table) {
-=======
         Schema::create('users', function (Blueprint $table) {
->>>>>>> 594515e (testing)
             $table->bigIncrements('iUserId'); // Primary key, auto-incrementing bigint
             $table->string('vUniqueCode', 255)->nullable()->index(); // Unique code, nullable, indexed
             $table->bigInteger('iRoleId')->unsigned()->nullable()->index(); // Role ID, unsigned bigint, nullable, indexed
@@ -153,10 +145,6 @@ return new class extends Migration
             $table->string('vPhone', 25)->nullable(); // Phone number, varchar(25), nullable
             $table->string('vAuthCode', 255)->nullable(); // Auth code, varchar(255), nullable
             $table->enum('eStatus', ['Active', 'Inactive', 'Pending'])->default('Active')->index(); // Status, enum, default 'Active', indexed
-<<<<<<< HEAD
-            $table->enum('eFeature', ['Yes', 'No'])->default('No')->index(); // Feature flag, enum, default 'No', indexed
-=======
->>>>>>> 594515e (testing)
             $table->enum('eDelete', ['Yes', 'No'])->default('No')->index(); // Delete flag, enum, default 'No', indexed
             $table->dateTime('dtAddedDate')->nullable()->index(); // Added date, datetime, nullable, indexed
             $table->dateTime('dtUpdatedDate')->nullable()->index(); // Updated date, datetime, nullable, indexed
@@ -176,8 +164,6 @@ return new class extends Migration
             $table->dateTime('dtAddedDate')->nullable();
         });
 
-<<<<<<< HEAD
-=======
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -237,7 +223,6 @@ return new class extends Migration
             $table->longText('exception');
             $table->timestamp('failed_at')->useCurrent();
         });
->>>>>>> 594515e (testing)
 
     }
 
@@ -249,9 +234,6 @@ return new class extends Migration
         Schema::dropIfExists('pagination');
         Schema::dropIfExists('role');
         Schema::dropIfExists('setting');
-<<<<<<< HEAD
-        Schema::dropIfExists('user');
-=======
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
@@ -261,6 +243,5 @@ return new class extends Migration
         Schema::dropIfExists('job_batches');
         Schema::dropIfExists('failed_jobs');
         
->>>>>>> 594515e (testing)
     }
 };
