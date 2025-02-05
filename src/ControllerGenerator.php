@@ -94,7 +94,7 @@ class ControllerGenerator
         }
 
         File::put($controllerFilePath, $content);
-        exec(__DIR__."/../vendor/bin/pint {$controllerFilePath}",$output,$status);
+        exec(__DIR__."/../../../bin/pint {$controllerFilePath}",$output,$status);
 
         $this->generate_route($controllerPathName ,$controllerName);
         
@@ -174,6 +174,7 @@ class ControllerGenerator
                     return; // Skip adding if the route already exists
                 }
     
+                $search1 = "/*********************** New Admin Routes will be here ********************/";
                 // Construct the new route block
                 $newRoutes = PHP_EOL . PHP_EOL . "// {$this->module_og}" . PHP_EOL;
                 $newRoutes .= "Route::prefix('{$this->panel}/{$routeModule}')->name('{$this->panel}.{$this->module_og}.')->group(function () {" . PHP_EOL;
@@ -183,9 +184,13 @@ class ControllerGenerator
                 $newRoutes .= "    Route::post('store', [{$controllerName}::class, 'store'])->name('store');" . PHP_EOL;
                 $newRoutes .= "    Route::get('edit/{vUniqueCode}', [{$controllerName}::class, 'edit'])->name('edit');" . PHP_EOL;
                 $newRoutes .= "});";
+                $newRoutes .= PHP_EOL . PHP_EOL . $search1;
     
-                // Append the new routes to the file
-                File::put($webFile, $webContent . $newRoutes);
+                str_replace($search1, $newRoutes, $webContent);
+
+                $RouteFilePath = base_path('routes/web.php');
+
+                exec(__DIR__."/../../../bin/pint {$RouteFilePath}",$output,$status);
             }
         }
     }
@@ -220,7 +225,7 @@ class ControllerGenerator
         $content = $this->insert_criteria_code($content, $columns, $this->data['listing']);
 
         File::put($ModelFilePath, $content);
-        exec(__DIR__."/../vendor/bin/pint {$ModelFilePath}",$output,$status);
+        exec(__DIR__."/../../../bin/pint {$ModelFilePath}",$output,$status);
 
     }
 
@@ -314,7 +319,7 @@ class ControllerGenerator
 
         $listingContent = $this->generateListingContent($getAllColumns, $listColumn);
         File::put($paths['listing'], $listingContent);
-        exec(__DIR__."/../vendor/bin/pint {$paths['listing']}",$output,$status);
+        exec(__DIR__."/../../../bin/pint {$paths['listing']}",$output,$status);
 
         $this->generateAjaxContent($this->data['listing'], $paths['ajax']);
         $this->generateAddContent($this->data['add'], $paths['add']);
@@ -471,7 +476,7 @@ class ControllerGenerator
         $ajaxContent = $this->generateAjaxHtml($listingData);
         $ajaxContent = str_replace(['ModuleData', 'module_name', '//ajaxHtml'], [ucwords($this->module).'Data', $this->module_og, $ajaxContent], $ajaxTemplate);
         File::put($ajaxFilePath, $ajaxContent);
-        exec(__DIR__."/../vendor/bin/pint {$ajaxFilePath}",$output,$status);
+        exec(__DIR__."/../../../bin/pint {$ajaxFilePath}",$output,$status);
 
     }
 
@@ -546,7 +551,7 @@ class ControllerGenerator
         $addContent = $this->generateAddHtml($addData);
         $addContent = str_replace(['ModuleName', 'module_name', '//AddFields', '//ImageAdd', '//VarAdd', '//ValAdd'], [ucwords($this->module), $this->module_og, $addContent['html'], $addContent['jsImage'], $addContent['jsVars'], $addContent['jsValidation']], $addTemplate);
         File::put($addFilePath, $addContent);
-        exec(__DIR__."/../vendor/bin/pint {$addFilePath}",$output,$status);
+        exec(__DIR__."/../../../bin/pint {$addFilePath}",$output,$status);
        
     }
 

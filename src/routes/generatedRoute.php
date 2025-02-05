@@ -130,6 +130,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('controller-method', [MetaController::class, 'get_method_by_controller'])->name('controller-method');
         });
 
+        /*********************** New Admin Routes will be here ********************/
+
     });
 });
 
