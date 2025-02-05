@@ -23,6 +23,7 @@ class AdminAuthentication
             if(!empty($user_id) && !empty($username)){
                 return redirect()->route('admin.dashboard');
             }
+            return $next($request);
         }
 
         if(!empty($user_id) && !empty($username)){
