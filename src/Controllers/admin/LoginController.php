@@ -31,11 +31,6 @@ class LoginController extends Controller
             'secret' => $recaptchaSecretKey,
             'response' => $responseToken
         );
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 594515e (testing)
         $options = array(
             'http' => array(
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",

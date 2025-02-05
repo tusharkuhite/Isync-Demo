@@ -2,12 +2,9 @@
 * demo.css
 * File include item demo only specific css only
 ******************************************************************************/
-<<<<<<< HEAD
-=======
 .mb-6 {
   margin-bottom: 1.5rem !important;
 }
->>>>>>> 594515e (testing)
 
 .menu .app-brand.demo {
   height: 90px;
