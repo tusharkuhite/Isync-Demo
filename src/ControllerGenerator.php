@@ -24,7 +24,7 @@ class ControllerGenerator
     public function __construct(Request $request)
     {
         $this->databaseName = config('database.connections.mysql.database');
-        $this->panel = 'testing';
+        $this->panel = 'admin';
         $this->data['listing'] = $request->has('listing') ? $request->listing : null;
         $this->data['add'] = $request->has('add') ? $request->add : null;
         $this->module = $request->has('module') ? $request->module : null;
@@ -53,7 +53,7 @@ class ControllerGenerator
             }
         }
         Artisan::call('optimize');
-        
+
         return 'All well';
     }
 
