@@ -3,6 +3,7 @@
 namespace Isync\Demo;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -51,7 +52,8 @@ class ControllerGenerator
                 return 'File Exists';
             }
         }
-
+        Artisan::call('optimize');
+        
         return 'All well';
     }
 
