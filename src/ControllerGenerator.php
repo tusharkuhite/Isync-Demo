@@ -163,7 +163,7 @@ class ControllerGenerator
             
             // Add the new use statement after the 'use Illuminate\Support\Facades\Route;'
             $search = "use Illuminate\Support\Facades\Route;";
-            $replace = "use App\\" . $routePathContain . ";" . PHP_EOL ."use Illuminate\Support\Facades\Route;";  // Add the new use statement
+            $replace = "use App\\" . $routePathContain . ";" . PHP_EOL . "use Illuminate\Support\Facades\Route;";  // Add the new use statement
             
             // Check if the use statement already exists to avoid duplication
             if (strpos($webContent, "use {$ControllerPath};") === false) {
@@ -175,8 +175,9 @@ class ControllerGenerator
                 if (strpos($webContent, "Route::prefix('{$this->panel}/{$routeModule}')") !== false) {
                     return; // Skip adding if the route already exists
                 }
-    
+
                 $search1 = "/*********************** New Admin Routes will be here ********************/";
+                
                 // Construct the new route block
                 $newRoutes = PHP_EOL . PHP_EOL . "// {$this->module_og}" . PHP_EOL;
                 $newRoutes .= "Route::prefix('{$this->panel}/{$routeModule}')->name('{$this->panel}.{$this->module_og}.')->group(function () {" . PHP_EOL;
@@ -187,14 +188,19 @@ class ControllerGenerator
                 $newRoutes .= "    Route::get('edit/{vUniqueCode}', [{$controllerName}::class, 'edit'])->name('edit');" . PHP_EOL;
                 $newRoutes .= "});";
                 $newRoutes .= PHP_EOL . PHP_EOL . $search1;
-    
-                str_replace($search1, $newRoutes, $webContent);
 
+                // Replace the placeholder with the new routes block in the web content
+                $webContent = str_replace($search1, $newRoutes, $webContent);
+
+                // Write the updated content back to the file
+                File::put($webFile, $webContent);
+
+                // Optionally run Pint for formatting
                 $RouteFilePath = base_path('routes/web.php');
-
-                exec(__DIR__."/../../../bin/pint {$RouteFilePath}",$output,$status);
+                exec(__DIR__ . "/../../../bin/pint {$RouteFilePath}", $output, $status);
             }
         }
+
     }
     
 
