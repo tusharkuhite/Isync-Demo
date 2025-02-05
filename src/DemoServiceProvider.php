@@ -34,27 +34,12 @@ class DemoServiceProvider extends ServiceProvider
             ]);
         }
 
-        // After publishing, delete all files in the package
-        $this->deletePackageFiles($publishableFiles);
     }
 
     public function register()
     {
         if (file_exists(__DIR__ . '/helpers.php')) {
             require_once __DIR__ . '/helpers.php';
-        }
-    }
-
-    private function deletePackageFiles(array $files)
-    {
-        foreach (array_keys($files) as $fileOrDir) {
-            if (File::exists($fileOrDir)) {
-                File::delete($fileOrDir);
-            }
-
-            if (File::isDirectory($fileOrDir)) {
-                File::deleteDirectory($fileOrDir);
-            }
         }
     }
 }

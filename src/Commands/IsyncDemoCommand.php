@@ -40,15 +40,15 @@ class IsyncDemoCommand extends Command
         ];
 
 
-        // foreach (array_keys($publishableFiles) as $fileOrDir) {
-        //     if (File::exists($fileOrDir)) {
-        //         File::delete($fileOrDir);
-        //     }
+        foreach (array_keys($publishableFiles) as $fileOrDir) {
+            if (File::exists($fileOrDir)) {
+                File::delete($fileOrDir);
+            }
 
-        //     if (File::isDirectory($fileOrDir)) {
-        //         File::deleteDirectory($fileOrDir);
-        //     }
-        // }
+            if (File::isDirectory($fileOrDir)) {
+                File::deleteDirectory($fileOrDir);
+            }
+        }
     
         $this->info('Hello Isync Developer! The setup is complete.');
     }
