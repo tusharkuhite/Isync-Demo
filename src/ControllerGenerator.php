@@ -161,11 +161,7 @@ class ControllerGenerator
             
             // Add the new use statement after the 'use Illuminate\Support\Facades\Route;'
             $search = "use Illuminate\Support\Facades\Route;";
-<<<<<<< HEAD
-            $replace = "use Illuminate\Support\Facades\Route;" . PHP_EOL . "use App\\" . $routePathContain . ";"; // Add the new use statement
-=======
             $replace = "use App\\" . $routePathContain . ";" . PHP_EOL ."use Illuminate\Support\Facades\Route;";  // Add the new use statement
->>>>>>> 594515e (testing)
             
             // Check if the use statement already exists to avoid duplication
             if (strpos($webContent, "use {$ControllerPath};") === false) {
