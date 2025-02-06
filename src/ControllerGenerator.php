@@ -180,7 +180,7 @@ class ControllerGenerator
                 
                 // Construct the new route block
                 $newRoutes = PHP_EOL . PHP_EOL . "// {$this->module_og}" . PHP_EOL;
-                $newRoutes .= "Route::prefix('{$this->panel}/{$routeModule}')->name('{$this->panel}.{$this->module_og}.')->group(function () {" . PHP_EOL;
+                $newRoutes .= "Route::prefix('{$routeModule}')->name('{$this->module_og}.')->group(function () {" . PHP_EOL;
                 $newRoutes .= "    Route::get('/', [{$controllerName}::class, 'index'])->name('listing');" . PHP_EOL;
                 $newRoutes .= "    Route::post('ajax_listing', [{$controllerName}::class, 'ajax_listing'])->name('ajax_listing');" . PHP_EOL;
                 $newRoutes .= "    Route::get('add', [{$controllerName}::class, 'add'])->name('add');" . PHP_EOL;
@@ -288,9 +288,9 @@ class ControllerGenerator
     private function make_resources()
     {
         $paths = [
-            'listing' => resource_path("views/{$this->panel}/{$this->module}/listing.blade.php"),
-            'ajax' => resource_path("views/{$this->panel}/{$this->module}/ajax_listing.blade.php"),
-            'add' => resource_path("views/{$this->panel}/{$this->module}/add.blade.php"),
+            'listing' => resource_path("views/{$this->panel}/{$this->module_og}/listing.blade.php"),
+            'ajax' => resource_path("views/{$this->panel}/{$this->module_og}/ajax_listing.blade.php"),
+            'add' => resource_path("views/{$this->panel}/{$this->module_og}/add.blade.php"),
         ];
 
         $getAllColumns = DB::select(

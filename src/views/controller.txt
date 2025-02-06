@@ -129,7 +129,8 @@ class ControllerName extends Controller
 
         $data                   = array();
         $data['data']           = ModelName::get_all_data($criteria);
-
+        $data['ModuleData']     = $ModuleData;
+        
         if($paginator->total > $selectedpagelimit)
         {
             $data['paging'] = $paginator->paginate($selectedpagelimit);
