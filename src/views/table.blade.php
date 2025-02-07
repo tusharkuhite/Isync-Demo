@@ -57,8 +57,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a  id="create_modules" href="javascript:;" class="btn btn-primary">Confirm</a>
+                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                    <a href="javascript:;" class="btn btn-primary loading" style="display: none;">
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>Loading...
+                  </a>
+                    <a  id="create_modules" href="javascript:;" class="btn btn-primary submit">Confirm</a>
                 </div>
             </div>
         </div>
@@ -155,6 +158,11 @@
             data.add.push($(this).attr('data-column'));
         });
 
+        $('.submit').hide();
+         $('.loading').show();
+         
+       
+
         $.ajax({
             url: "{{ route('superadmin.create') }}",
             type: "POST",
@@ -163,7 +171,9 @@
             },
             data: data,
             success: function(response) {
-                console.log(response);
+                setTimeout(function() {
+                   location.reload();
+            }, 1000);
             }
         });
     });

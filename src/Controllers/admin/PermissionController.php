@@ -16,9 +16,6 @@ class PermissionController extends Controller
     public function index()
     {
 
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
             $criteria             = array();
             $criteria['eStatus']  = "Active";
             $criteria['eDelete']  = "No";
@@ -30,10 +27,6 @@ class PermissionController extends Controller
             $data['modules']      = ModuleModel::get_all_modules($criteria);
 
             return view('admin.permission.listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
     }
 
     public function ajax_listing(Request $request)
@@ -165,46 +158,31 @@ class PermissionController extends Controller
         }
         // --------------
 
-        $data1  = General::check_module_permission();
-
-        if ($data1["permission"] != null && $data1["permission"]->eRead == "Yes") {
-            $data["permission"] = $data1["permission"];
-            $data['PermissionData'] = $PermissionData;
-            return view('admin.permission.ajax_listing')->with($data);
-        } else {
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        $data['PermissionData'] = $PermissionData;
+        return view('admin.permission.ajax_listing')->with($data);
+       
     }
     public function add()
     {
-        $data  = General::check_module_permission();
+        $criteria             = array();
+        $criteria['eStatus']  = "Active";
+        $criteria['eDelete']  = "No";
+        $data['roles']        = RoleModel::get_all_data($criteria);
 
-        if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
-            $criteria             = array();
-            $criteria['eStatus']  = "Active";
-            $criteria['eDelete']  = "No";
-            $data['roles']        = RoleModel::get_all_data($criteria);
+        $criteria             = array();
+        $criteria['eStatus']  = "Active";
+        $criteria['eDelete']  = "No";
+        $data['modules']      = ModuleModel::get_all_data($criteria);
 
-            $criteria             = array();
-            $criteria['eStatus']  = "Active";
-            $criteria['eDelete']  = "No";
-            $data['modules']      = ModuleModel::get_all_data($criteria);
-
-            return view('admin.permission.add')->with($data);
-        } else {
-
-            return redirect()->route('admin.permission.listing')->withError('can not access without permission.');
-        }
+        return view('admin.permission.add')->with($data);
     }
     public function edit($vUniqueCode)
     {
+
         $criteria                   = array();
         $criteria["vUniqueCode"]    = $vUniqueCode;
         $data['permissions']        = PermissionModel::get_by_id($criteria);
-        $criteria                   = array();
-        $criteria["iModuleId"]      = $data['permissions']->iModuleId;
-        $criteria["iRoleId"]        = $data['permissions']->iRoleId;
-        $data['allpermissions']     = PermissionModel::get_all_data($criteria);
+        
         $criteria                   = array();
         $criteria["eStatus"]        = "Active";
         $criteria["eDelete"]        = "No";
@@ -213,29 +191,20 @@ class PermissionController extends Controller
 
 
         if (!empty($vUniqueCode)) {
-            $data1  = General::check_module_permission();
+            if (!empty($data['permissions'])) {
+                $criteria             = array();
+                $criteria['eStatus']  = "Active";
+                $criteria['eDelete']  = "No";
+                $data['roles']        = RoleModel::get_all_data($criteria);
 
-            if ($data1["permission"] != null && $data1["permission"]->eWrite == "Yes") {
-                $data["permission"] = $data1["permission"];
+                $criteria             = array();
+                $criteria['eStatus']  = "Active";
+                $criteria['eDelete']  = "No";
+                $data['modules']      = ModuleModel::get_all_data($criteria);
 
-                if (!empty($data['permissions'])) {
-                    $criteria             = array();
-                    $criteria['eStatus']  = "Active";
-                    $criteria['eDelete']  = "No";
-                    $data['roles']        = RoleModel::get_all_data($criteria);
-
-                    $criteria             = array();
-                    $criteria['eStatus']  = "Active";
-                    $criteria['eDelete']  = "No";
-                    $data['modules']      = ModuleModel::get_all_data($criteria);
-
-                    return view('admin.permission.add')->with($data);
-                } else {
-                    return redirect()->route('admin.permission.listing');
-                }
+                return view('admin.permission.add')->with($data);
             } else {
-
-                return redirect()->route('admin.permission.listing')->withError('can not access without permission.');
+                return redirect()->route('admin.permission.listing');
             }
         } else {
             return redirect()->route('admin.permission.listing');

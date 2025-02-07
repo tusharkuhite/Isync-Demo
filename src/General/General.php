@@ -231,22 +231,31 @@ class General
     static function check_module_permission(){
         $criteria                = array();
         $criteria['vController'] = class_basename(Route::current()->controller);
+        if(empty($criteria['vController'])){
+            $route = request()->route();
+            $fullController = $route->getAction()['controller'] ?? null;
+            if ($fullController) {
+                $criteria['vController'] = class_basename(explode('@', $fullController)[0]);
+            }
+        }
+
         $criteria['eDelete']     = "No";
         $criteria['eStatus']     = "Active";
         $criteria["iRoleId"]     = Session::get('iRoleId');
+        
         $module                  = ModuleModel::get_by_id($criteria);
 
         if($module != null)
         {
             $criteria               = array();
             $criteria["iModuleId"]  = $module->iModuleId;
-            $data["permission"]  = array();
-            $data["permission"] = General::check_permission($criteria);
+            $data = array();
+            $data = General::check_permission($criteria);
         }
         else
         {
-            $data["permission"]  = array();
-            $data["permission"]  = null;
+            $data  = array();
+            $data  = null;
         }
         return $data;
     }

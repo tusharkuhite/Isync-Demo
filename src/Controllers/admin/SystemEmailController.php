@@ -12,13 +12,7 @@ class SystemEmailController extends Controller
 {
     public function index()
     {
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
-            return view('admin.system_email.listing')->with($data);
-        } else {
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        return view('admin.system_email.listing');
     }
 
     public function ajax_listing(Request $request)
@@ -93,43 +87,25 @@ class SystemEmailController extends Controller
             $data['paging'] = $paginator->paginate($selectedpagelimit);
         }
         // --------------
-        $data1  = General::check_module_permission();
-
-        if ($data1["permission"] != null && $data1["permission"]->eRead == "Yes") {
-            $data["permission"] = $data1["permission"];
-            $data['SystemEmailData']  = $SystemEmailData;
-            return view('admin.system_email.ajax_listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        
+        $data['SystemEmailData']  = $SystemEmailData;
+        return view('admin.system_email.ajax_listing')->with($data);
     }
+
     public function add()
     {
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
-            return view('admin.system_email.add')->with($data);
-        } else {
-
-            return redirect()->route('make.listing')->withError('can not access without permission.');
-        }
+       
+        return view('admin.system_email.add');
     }
     public function edit($vUniqueCode)
     {
         if (!empty($vUniqueCode)) {
-            $data  = General::check_module_permission();
+           
+            $criteria                   = array();
+            $criteria["vUniqueCode"]    = $vUniqueCode;
+            $data['systemEmail']        = SystemEmailModel::get_by_id($criteria);
 
-            if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
-                $criteria                   = array();
-                $criteria["vUniqueCode"]    = $vUniqueCode;
-                $data['systemEmail']        = SystemEmailModel::get_by_id($criteria);
-
-                return view('admin.system_email.add')->with($data);
-            } else {
-
-                return redirect()->route('system_email.listing')->withError('can not access without permission.');
-            }
+            return view('admin.system_email.add')->with($data);
         } else {
             return redirect()->route('admin.systemEmail.listing');
         }

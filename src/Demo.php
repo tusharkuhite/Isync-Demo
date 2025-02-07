@@ -50,7 +50,6 @@ class Demo
 
     public function create(Request $request)
     {
-        // dd($request->all());
         // Ensure the ControllerGenerator is being used correctly
         $path = new ControllerGenerator($request);
         $path->create($request); // Process request through the controller generator

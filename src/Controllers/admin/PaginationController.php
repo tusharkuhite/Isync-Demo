@@ -14,26 +14,7 @@ class PaginationController extends Controller
 {
     public function index()
     {
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
-            $criteria                = array();
-            $criteria['vController'] = "PaginationController";
-            $criteria['vMethod']     = "index";
-            $criteria['eStatus']     = "Active";
-            $data['MetaTitle']       = MetaModel::get_by_id($criteria);
-
-
-            $criteria                = array();
-            $criteria['eDelete']     = "No";
-            $criteria['eStatus']     = "Active";
-            $data['totalPagination'] = PaginationModel::total_pagination_data($criteria);
-
-            return view('admin.pagination.listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        return view('admin.pagination.listing');
     }
 
     public function ajax_listing(Request $request)
@@ -132,22 +113,13 @@ class PaginationController extends Controller
             $data['paging'] = $paginator->paginate($selectedpagelimit);
         }
 
-        $data1  = General::check_module_permission();
-
-        if ($data1["permission"] != null && $data1["permission"]->eRead == "Yes") {
-            $data["permission"] = $data1["permission"];
-            $data['PaginationData']  = $PaginationData;
-            return view('admin.pagination.ajax_listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        $data['PaginationData']  = $PaginationData;
+        return view('admin.pagination.ajax_listing')->with($data);
+        
     }
     public function add()
     {
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
+       
             $controllers = [];
             foreach (Route::getRoutes()->getRoutes() as $route) {
                 $action = $route->getAction();
@@ -215,18 +187,13 @@ class PaginationController extends Controller
             $data['listofcontrollers'] = array_diff($listofcontrollers, $getExistControllers);
 
             return view('admin.pagination.add')->with($data);
-        } else {
-
-            return redirect()->route('admin.pagination.listing')->withError('can not access without permission.');
-        }
     }
+
     public function edit($vUniqueCode)
     {
 
         if (!empty($vUniqueCode)) {
-            $data  = General::check_module_permission();
-
-            if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
+           
                 $controllers = [];
                 foreach (Route::getRoutes()->getRoutes() as $route) {
                     $action = $route->getAction();
@@ -289,9 +256,6 @@ class PaginationController extends Controller
 
                 return redirect()->route('admin.pagination.listing')->withError('can not access without permission.');
             }
-        } else {
-            return redirect()->route('admin.pagination.listing');
-        }
     }
 
     public function store(Request $request)

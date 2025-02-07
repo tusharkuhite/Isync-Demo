@@ -72,6 +72,19 @@ class ControllerGenerator
             [$this->databaseName, $this->module]
         );
 
+        $getAutoIncrementColumn = DB::select(
+            'SELECT COLUMN_NAME 
+             FROM INFORMATION_SCHEMA.COLUMNS 
+             WHERE TABLE_SCHEMA = ? 
+             AND TABLE_NAME = ? 
+             AND EXTRA LIKE "%auto_increment%" 
+             LIMIT 1',
+            [$this->databaseName, $this->module]
+        );
+        
+        // Extract column name from result
+        $autoIncrementColumn = $getAutoIncrementColumn[0]->COLUMN_NAME ?? null;
+
         $directory = dirname($controllerFilePath);
 
         if (! File::exists($directory)) {
@@ -84,7 +97,7 @@ class ControllerGenerator
 
         $file = __DIR__.'/views/controller.txt';
         $content = file_get_contents($file);
-        $content = $this->replace_placeholders($content, $this->module, $this->panel);
+        $content = $this->replace_placeholders($content , $autoIncrementColumn);
 
         $code = $this->generate_code_snippets($getAllColumns, $this->data['listing'], $this->data['add']);
 
@@ -104,11 +117,11 @@ class ControllerGenerator
         return 'true';
     }
 
-    private function replace_placeholders($content)
+    private function replace_placeholders($content , $autoIncrementColumn)
     {
         return str_replace(
             ['module_name', 'ModelName', 'Panel', 'ControllerName', 'ModuleData', 'module', 'Module data', 'iModuleId'],
-            [$this->module_og, ucwords($this->module).'Model', $this->panel, ucwords($this->module).'Controller', ucwords($this->module).'Data', $this->module, ucwords($this->module).' data', 'i'.ucwords($this->module).'Id'],
+            [$this->module_og, ucwords($this->module).'Model', $this->panel, ucwords($this->module).'Controller', ucwords($this->module).'Data', $this->module, ucwords($this->module).' data', $autoIncrementColumn],
             $content
         );
     }
@@ -217,6 +230,19 @@ class ControllerGenerator
             [$this->databaseName, $this->module]
         );
 
+        $getAutoIncrementColumn = DB::select(
+            'SELECT COLUMN_NAME 
+             FROM INFORMATION_SCHEMA.COLUMNS 
+             WHERE TABLE_SCHEMA = ? 
+             AND TABLE_NAME = ? 
+             AND EXTRA LIKE "%auto_increment%" 
+             LIMIT 1',
+            [$this->databaseName, $this->module]
+        );
+        
+        // Extract column name from result
+        $autoIncrementColumn = $getAutoIncrementColumn[0]->COLUMN_NAME ?? null;
+
         if (! File::exists($directory = dirname($ModelFilePath))) {
             File::makeDirectory($directory, 0755, true);
         }
@@ -229,7 +255,7 @@ class ControllerGenerator
         $columnsString = $this->format_columns($columns);
 
         $content = $this->get_model_template();
-        $content = $this->replace_placeholders1($content, $columnsString);
+        $content = $this->replace_placeholders1($content, $columnsString , $autoIncrementColumn);
         $content = $this->insert_criteria_code($content, $columns, $this->data['listing']);
 
         File::put($ModelFilePath, $content);
@@ -247,11 +273,11 @@ class ControllerGenerator
         return file_get_contents(__DIR__.'/views/model.txt');
     }
 
-    private function replace_placeholders1($content, $columnsString)
+    private function replace_placeholders1($content, $columnsString , $autoIncrementColumn)
     {
         return str_replace(
             ['ModelName', 'module', 'iModelId', 'ColumnName', 'Panel'],
-            [ucwords($this->module).'Model', $this->module, 'i'.ucwords($this->module).'Id', $columnsString, $this->panel],
+            [ucwords($this->module).'Model', $this->module, $autoIncrementColumn, $columnsString, $this->panel],
             $content
         );
     }

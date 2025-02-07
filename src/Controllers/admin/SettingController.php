@@ -14,15 +14,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
-            return view('admin.setting.listing');
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        return view('admin.setting.listing');
     }
 
     public function store(Request $request)

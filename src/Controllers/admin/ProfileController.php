@@ -14,11 +14,6 @@ class ProfileController extends Controller
     public function index($vUniqueCode)
     {
         if (!empty($vUniqueCode)) {
-
-            $data  = General::check_module_permission();
-
-            if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
-
                 $criteria                   = array();
                 $criteria["vUniqueCode"]    = $vUniqueCode;
                 $criteria["iRoleId"]        = Session::get('iRoleId');
@@ -38,10 +33,6 @@ class ProfileController extends Controller
 
                     return redirect()->route('admin.dashboard')->withError('can not access without permission.');
                 }
-            } else {
-
-                return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-            }
         } else {
 
             return redirect()->route('admin.dashboard');
@@ -55,7 +46,7 @@ class ProfileController extends Controller
 
             $data  = General::check_module_permission();
 
-            if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
+            if ($data != null && $data->eRead == "Yes") {
                 $criteria                   = array();
                 $criteria["vUniqueCode"]    = Session::get('vUniqueCode');
                 $criteria["iRoleId"]        = Session::get('iRoleId');

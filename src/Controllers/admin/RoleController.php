@@ -12,15 +12,8 @@ class RoleController extends Controller
 {
     public function index()
     {
-
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eRead == "Yes") {
-            return view('admin.role.listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+            return view('admin.role.listing');
+        
     }
 
     public function ajax_listing(Request $request)
@@ -96,46 +89,28 @@ class RoleController extends Controller
             $data['paging'] = $paginator->paginate($selectedpagelimit);
         }
         // --------------
-        $data1  = General::check_module_permission();
-
-        if ($data1["permission"] != null && $data1["permission"]->eRead == "Yes") {
-            $data["permission"] = $data1["permission"];
+       
             $data['RoleData']  = $RoleData;
             return view('admin.role.ajax_listing')->with($data);
-        } else {
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
     }
+
     public function add()
     {
-        $data  = General::check_module_permission();
-
-        if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
-            return view('admin.role.add')->with($data);
-        } else {
-
-            return redirect()->route('admin.role.listing')->withError('can not  access without permission.');
-        }
+        
+        return view('admin.role.add');
+        
     }
     public function edit($vUniqueCode)
     {
         if (!empty($vUniqueCode)) {
-            $data  = General::check_module_permission();
+            $criteria                   = array();
+            $criteria["vUniqueCode"]    = $vUniqueCode;
+            $data['roles']              = RoleModel::get_by_id($criteria);
 
-            if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
-                $criteria                   = array();
-                $criteria["vUniqueCode"]    = $vUniqueCode;
-                $data['roles']              = RoleModel::get_by_id($criteria);
-
-                if (!empty($data['roles'])) {
-                    return view('admin.role.add')->with($data);
-                } else {
-                    return redirect()->route('admin.role.listing');
-                }
+            if (!empty($data['roles'])) {
+                return view('admin.role.add')->with($data);
             } else {
-
-                return redirect()->route('admin.role.listing')->withError('can not  access without permission.');
+                return redirect()->route('admin.role.listing');
             }
         } else {
             return redirect()->route('admin.role.listing');

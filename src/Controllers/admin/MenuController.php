@@ -13,21 +13,13 @@ class MenuController extends Controller
 {
     public function index()
     {   
-        $data  = General::check_module_permission();
 
-        if($data["permission"] != null && $data["permission"]->eRead == "Yes")
-        {
             $criteria             = array();
             $criteria['eStatus']  = "Active";
             $criteria['eDelete']  = "No";
             $data['roles']        = RoleModel::get_all_data($criteria);
 
             return view('admin.menu.listing')->with($data);
-        }
-        else
-        {
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        } 
     }
 
     public function ajax_listing(Request $request)
@@ -147,66 +139,44 @@ class MenuController extends Controller
         // --------------
         $data1  = General::check_module_permission();
         
-        if($data1["permission"] != null && $data1["permission"]->eRead == "Yes")
-        {   
-            $data["permission"]  = $data1["permission"];
+      
             $data['MenuData']  = $MenuData;
             return view('admin.menu.ajax_listing')->with($data);  
-        }
-        else
-        {
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+
     }
+
     public function add()
     {   
-        $data  = General::check_module_permission();
+        $criteria             = array();
+        $criteria['eStatus']  = "Active";
+        $criteria['eDelete']  = "No";
+        $data['roles']        = RoleModel::get_all_data($criteria);
 
-        if($data["permission"] != null && $data["permission"]->eWrite == "Yes")
-        { 
+        return view('admin.menu.add')->with($data);
+    }
+
+    public function edit($vUniqueCode)
+    {
+       if(!empty($vUniqueCode))
+       {    
+          
+            $criteria                    = array();
+            $criteria["vUniqueCode"]     = $vUniqueCode;
+            $data['menues']              = MenuModel::get_by_id($criteria);
+
             $criteria             = array();
             $criteria['eStatus']  = "Active";
             $criteria['eDelete']  = "No";
             $data['roles']        = RoleModel::get_all_data($criteria);
 
-            return view('admin.menu.add')->with($data);
-        }
-        else
-        {
-            return redirect()->route('admin.menu.listing')->withError('can not access without permission.');
-        }  
-    }
-    public function edit($vUniqueCode)
-    {
-       if(!empty($vUniqueCode))
-       {    
-         $data  = General::check_module_permission();
-
-            if($data["permission"] != null && $data["permission"]->eWrite == "Yes")
-            { 
-                $criteria                    = array();
-                $criteria["vUniqueCode"]     = $vUniqueCode;
-                $data['menues']              = MenuModel::get_by_id($criteria);
-
-                $criteria             = array();
-                $criteria['eStatus']  = "Active";
-                $criteria['eDelete']  = "No";
-                $data['roles']        = RoleModel::get_all_data($criteria);
-
-                if(!empty($data['menues']))
-                {
-                    return view('admin.menu.add')->with($data);
-                }
-                else
-                {
-                    return redirect()->route('admin.menu.listing');
-                }
-
+            if(!empty($data['menues']))
+            {
+                return view('admin.menu.add')->with($data);
             }
             else
             {
-                return redirect()->route('admin.menu.listing')->withError('can not access without permission.');
-            }   
+                return redirect()->route('admin.menu.listing');
+            }
         }
         else
         {

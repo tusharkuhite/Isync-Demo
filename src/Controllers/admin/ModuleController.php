@@ -17,10 +17,7 @@ class ModuleController extends Controller
 {
     public function index()
     {    
-        $data = General::check_module_permission();
         
-        if($data["permission"] != null && $data["permission"]->eRead == "Yes")
-        {
 
             $criteria             = array();
             $criteria['eStatus']  = "Active";
@@ -44,11 +41,6 @@ class ModuleController extends Controller
             $data['MetaTitle']       = MetaModel::get_by_id($criteria);
 
             return view('admin.module.listing')->with($data);
-
-        }else{
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
     }
 
     public function ajax_listing(Request $request)
@@ -184,36 +176,14 @@ class ModuleController extends Controller
             $data["permission"] = $General->check_permission($criteria);
         }
         
-        if($data["permission"] != null && $data["permission"]->eRead == "Yes")
-        {  
-            $data['ModuleData']  = $ModuleData;
-            return view('admin.module.ajax_listing')->with($data);  
-
-        }else{
-
-            return redirect()->route('admin.dashboard')->withError('can not access without permission.');
-        }
+        $data['ModuleData']  = $ModuleData;
+        return view('admin.module.ajax_listing')->with($data);  
     }
+
     public function add()
     {   
         
-        $criteria                = array();
-        $criteria['vController'] = "ModuleController";
-        $criteria['eDelete']     = "No";
-        $criteria['eStatus']     = "Active";
-        $criteria["iRoleId"]     = Session::get('iRoleId');
-        $module                  = ModuleModel::get_by_id($criteria);
-
-        if($module != null)
-        {
-            $criteria               = array();
-            $criteria["iModuleId"]  = $module->iModuleId;
-            $General = new General;
-            $data["permission"] = $General->check_permission($criteria);
-        }  
-
-        if($data["permission"] != null && $data["permission"]->eWrite == "Yes")
-        {   
+        
             $controllers = [];
             foreach (Route::getRoutes()->getRoutes() as $route)
             {
@@ -277,31 +247,12 @@ class ModuleController extends Controller
             $data['MetaTitle']       = MetaModel::get_by_id($criteria);
 
             return view('admin.module.add')->with($data);
-        }else{
-
-            return redirect()->route('admin.module.listing')->withError('can not access without permission.');
-        } 
     }
+
     public function edit($vUniqueCode)
     {
 
-        $criteria                = array();
-        $criteria['vController'] = "ModuleController";
-        $criteria['eDelete']     = "No";
-        $criteria['eStatus']     = "Active";
-        $criteria["iRoleId"]     = Session::get('iRoleId');
-        $module                  = ModuleModel::get_by_id($criteria);
-
-        if($module != null)
-        {
-            $criteria               = array();
-            $criteria["iModuleId"]  = $module->iModuleId;
-            $General = new General;
-            $data["permission"] = $General->check_permission($criteria);
-        }
-
-        if($data["permission"] != null && $data["permission"]->eWrite == "Yes")
-        { 
+       
                $criteria                   = array();
                $criteria["vUniqueCode"]    = $vUniqueCode;
                $data['modules']            = ModuleModel::get_by_id($criteria);
@@ -375,9 +326,7 @@ class ModuleController extends Controller
                 {
                     return redirect()->route('admin.module.listing');
                 }
-        }else{
-            return redirect()->route('admin.module.listing')->withError('can not access without permission.');
-        }
+        
     }
 
     public function store(Request $request)

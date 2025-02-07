@@ -12,9 +12,7 @@ class DashboardController extends Controller
 {   
   public function index()
   {    
-    $data = General::check_module_permission();
-
-    return view('admin.dashboard.dashboard')->with($data);
+    return view('admin.dashboard.dashboard');
   }
 }
 

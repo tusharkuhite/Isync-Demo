@@ -158,15 +158,10 @@ class MetaController extends Controller
             $data['paging'] = $paginator->paginate($selectedpagelimit);
         }
         // --------------
-        $data1  = General::check_module_permission();
 
-        if ($data1["permission"] != null && $data1["permission"]->eRead == "Yes") {
-            $data["permission"] = $data1["permission"];
-            $data['MetaData']  = $MetaData;
-            return view('admin.meta.ajax_listing')->with($data);
-        } else {
-            return redirect()->route('admin.dashboard')->withError('Sorry, you do not have permission to access this page.');
-        }
+        $data['MetaData']  = $MetaData;
+        return view('admin.meta.ajax_listing')->with($data);
+
     }
 
     public function add()
@@ -201,21 +196,13 @@ class MetaController extends Controller
         }
         //ksort($methodsByController);
         $data['controllers']     = $methodsByController;
-
-        $data1  = General::check_module_permission();
-
-        if ($data1["permission"] != null && $data1["permission"]->eWrite == "Yes") {
-            $data["permission"] = $data1["permission"];
-            return view('admin.meta.add')->with($data);
-        } else {
-            return redirect()->route('admin.menu.listing')->withError('can not access without permission.');
-        }
+        return view('admin.meta.add')->with($data);
+        
     }
 
     public function edit($vUniqueCode)
     {
-        $data  = General::check_module_permission();
-        if ($data["permission"] != null && $data["permission"]->eWrite == "Yes") {
+       
             if (!empty($vUniqueCode)) {
                 $criteria                   = array();
                 $criteria["vUniqueCode"]    = $vUniqueCode;
@@ -258,9 +245,7 @@ class MetaController extends Controller
             } else {
                 return redirect()->route('dashboard.listing')->withError('Data Not Found!');
             }
-        } else {
-            return redirect()->route('admin.menu.listing')->withError('can not access without permission.');
-        }
+        
     }
 
     public function store(Request $request)
