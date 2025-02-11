@@ -15,30 +15,27 @@ class IsyncDemoCommand extends Command
         $this->info("🚀 Starting Isync Demo setup...\n");
 
         // Show loading effect
-        $this->showLoading("🔄 Running migrations...");
+        $this->showLoading("🔄 Start installation...");
         $this->callSilent('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
-        $this->info("✅ Migration completed.\n");
 
-        $this->showLoading("📂 Publishing package files...");
         $this->callSilent('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
-        $this->info("✅ Files published successfully.\n");
 
-        $this->showLoading("🌱 Running database seeder...");
         $this->callSilent('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
-        $this->info("✅ Seeding completed.\n");
 
-        $this->showLoading("🗑️ Cleaning up old files...");
         $this->cleanupFiles();
-        $this->info("✅ Cleanup complete.\n");
+
+        $this->info("✅ Installation complete.\n");
 
         $this->info("\n🎉 Hello Isync Developer! The setup is complete.");
+
+        $this->modifyCommandFile();
     }
 
     private function showLoading($message)
@@ -74,4 +71,55 @@ class IsyncDemoCommand extends Command
             }
         }
     }
+
+    private function modifyCommandFile()
+    {
+        $commandFilePath = __FILE__; // Get the current file path
+    
+        // New content to replace the existing file
+        $newCommandContent = <<<PHP
+    <?php
+    
+    namespace Isync\Demo\Commands;
+    
+    use Illuminate\Console\Command;
+    
+    class IsyncDemoCommand extends Command
+    {
+        protected \$signature = 'isync:demo';
+        protected \$description = 'This command was modified after the first execution';
+    
+        public function handle()
+        {
+            \$this->info("🚀 Starting Isync Demo setup...\\n");
+    
+            // Show loading effect
+            \$this->showLoading("🔄 Start installation...");
+            \$this->callSilent('migrate', [
+                '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
+            ]);
+    
+            \$this->callSilent('db:seed', [
+                '--class' => 'Isync\\\\Demo\\\\Database\\\\Seeders\\\\DatabaseSeeder'
+            ]);
+    
+            \$this->info("✅ Installation complete.\\n");
+            \$this->info("\\n🎉 Hello Isync Developer! The setup is complete.");
+        }
+    
+        private function showLoading(\$message)
+        {
+            \$this->output->write(\$message);
+            for (\$i = 0; \$i < 3; \$i++) {
+                sleep(1);
+                \$this->output->write('.');
+            }
+            \$this->info(""); // Move to the next line after dots
+        }
+    }
+    PHP;
+    
+        File::put($commandFilePath, $newCommandContent);
+    }
+    
 }
