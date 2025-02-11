@@ -14,16 +14,16 @@ class IsyncDemoCommand extends Command
 
     public function handle()
     {
-        $this->call('migrate', [
+        $this->callSilent('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
         
-        $this->call('vendor:publish', [
+        $this->callSilent('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
     
-        $this->call('db:seed', [
+        $this->callSilent('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
 
