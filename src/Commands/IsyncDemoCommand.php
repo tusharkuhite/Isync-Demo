@@ -24,7 +24,7 @@ class IsyncDemoCommand extends Command
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
         
-        $this->call('vendor:publish', [
+        $this->callSilently('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
