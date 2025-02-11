@@ -14,16 +14,9 @@ class IsyncDemoCommand extends Command
 
     public function handle()
     {
-
-        $this->info("🚀 Starting Isync Demo setup...\n");
-
-        // Show loading effect
-        $this->info("🔄 Start installation...");
-
-        $this->callSilent('migrate', [
+        $this->call('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
-        
         
         $this->call('vendor:publish', [
             '--tag' => 'generate-demo-files',
@@ -57,9 +50,6 @@ class IsyncDemoCommand extends Command
             }
         }
     
-        $this->info("✅ Installation complete.\n");
-
-        $this->info("\n🎉 Hello Isync Developer! The setup is complete.");
+        $this->info('Hello Isync Developer! The setup is complete.');
     }
-
 }
