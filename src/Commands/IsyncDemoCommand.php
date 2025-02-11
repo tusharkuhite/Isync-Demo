@@ -20,16 +20,16 @@ class IsyncDemoCommand extends Command
         $this->info("🔄 Start installation");
 
         
-        $this->callSilently('migrate', [
+        $this->call('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
         
-        $this->callSilently('vendor:publish', [
+        $this->call('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
         
-        $this->callSilently('db:seed', [
+        $this->call('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
         
