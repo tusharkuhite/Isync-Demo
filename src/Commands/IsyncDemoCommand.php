@@ -14,16 +14,21 @@ class IsyncDemoCommand extends Command
 
     public function handle()
     {
-        $this->callSilent('migrate', [
+        $this->info("\n🚀 Starting Isync Demo setup...\n");
+
+        // Show loading effect for migration
+        $this->showLoading("🔄 Start installation...");
+
+        $this->call('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
         
-        $this->callSilent('vendor:publish', [
+        $this->call('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
     
-        $this->callSilent('db:seed', [
+        $this->call('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
 
@@ -50,6 +55,7 @@ class IsyncDemoCommand extends Command
             }
         }
     
-        $this->info('Hello Isync Developer! The setup is complete.');
+        $this->info("\n✅ Installation complete.\n");
+        $this->info("🎉 Hello Isync Developer! The setup is complete.");
     }
 }
