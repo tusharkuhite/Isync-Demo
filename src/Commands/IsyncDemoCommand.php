@@ -17,6 +17,7 @@ class IsyncDemoCommand extends Command
         $this->info("\n🚀 Starting Isync Demo setup...\n");
 
         // Show loading effect for migration
+        $this->info("🔄 Start installation");
        
 
         $this->callSilently('migrate', [
@@ -44,7 +45,6 @@ class IsyncDemoCommand extends Command
             __DIR__ . '/../models/User.php' => app_path('Models/User.php')
         ];
 
-        $this->showLoading("🔄 Start installation");
 
         foreach (array_keys($publishableFiles) as $fileOrDir) {
             if (File::exists($fileOrDir)) {
@@ -55,19 +55,11 @@ class IsyncDemoCommand extends Command
                 File::deleteDirectory($fileOrDir);
             }
         }
+       
+        sleep(5);
     
         $this->info("\n✅ Installation complete.\n");
         $this->info("🎉 Hello Isync Developer! The setup is complete.");
-    }
-    
-    private function showLoading($message)
-    {
-        $this->output->write($message);
-        for ($i = 0; $i < 3; $i++) {
-            sleep(3);
-            $this->output->write('.');
-        }
-        $this->info("");
     }
 
 }
