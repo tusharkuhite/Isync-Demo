@@ -7,47 +7,33 @@ use Illuminate\Support\Facades\File;
 
 class IsyncDemoCommand extends Command
 {
+    
     protected $signature = 'isync:demo';
-    protected $description = 'This is a custom command to manage everything in one call';
+
+    protected $description = 'This is a custom command for manage everything in one call';
 
     public function handle()
     {
+
         $this->info("🚀 Starting Isync Demo setup...\n");
 
         // Show loading effect
-        $this->showLoading("🔄 Start installation...");
+        $this->info("🔄 Start installation...");
+
         $this->callSilent('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
-
-        $this->callSilent('vendor:publish', [
+        
+        
+        $this->call('vendor:publish', [
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
-
-        $this->callSilent('db:seed', [
+    
+        $this->call('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
 
-        $this->cleanupFiles();
-
-        $this->info("✅ Installation complete.\n");
-
-        $this->info("\n🎉 Hello Isync Developer! The setup is complete.");
-    }
-
-    private function showLoading($message)
-    {
-        $this->output->write($message);
-        for ($i = 0; $i < 3; $i++) {
-            sleep(1);
-            $this->output->write('.');
-        }
-        $this->info(""); 
-    }
-
-    private function cleanupFiles()
-    {
         $publishableFiles = [
             __DIR__ . '/../models' => app_path('Models'),
             __DIR__ . '/../Controllers' => app_path('Http/Controllers'),
@@ -60,14 +46,20 @@ class IsyncDemoCommand extends Command
             __DIR__ . '/../models/User.php' => app_path('Models/User.php')
         ];
 
+
         foreach (array_keys($publishableFiles) as $fileOrDir) {
             if (File::exists($fileOrDir)) {
                 File::delete($fileOrDir);
             }
+
             if (File::isDirectory($fileOrDir)) {
                 File::deleteDirectory($fileOrDir);
             }
         }
-    }
     
+        $this->info("✅ Installation complete.\n");
+
+        $this->info("\n🎉 Hello Isync Developer! The setup is complete.");
+    }
+
 }
