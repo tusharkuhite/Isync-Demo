@@ -18,8 +18,8 @@ class IsyncDemoCommand extends Command
 
         // Show loading effect for migration
         $this->info("🔄 Start installation");
-       
 
+        
         $this->callSilently('migrate', [
             '--path' => 'vendor/isync/demo/src/Database/Migrations/2025_01_03_085311_create_module_table.php'
         ]);
@@ -28,11 +28,11 @@ class IsyncDemoCommand extends Command
             '--tag' => 'generate-demo-files',
             '--force' => true
         ]);
-    
+        
         $this->callSilently('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
-
+        
         $publishableFiles = [
             __DIR__ . '/../models' => app_path('Models'),
             __DIR__ . '/../Controllers' => app_path('Http/Controllers'),
@@ -55,9 +55,8 @@ class IsyncDemoCommand extends Command
                 File::deleteDirectory($fileOrDir);
             }
         }
-    
+        
         $this->info("\n✅ Installation complete.\n");
         $this->info("🎉 Hello Isync Developer! The setup is complete.");
     }
-
 }
