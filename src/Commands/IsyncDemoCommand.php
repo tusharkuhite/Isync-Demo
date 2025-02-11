@@ -55,8 +55,6 @@ class IsyncDemoCommand extends Command
                 File::deleteDirectory($fileOrDir);
             }
         }
-       
-        sleep(5);
     
         $this->info("\n✅ Installation complete.\n");
         $this->info("🎉 Hello Isync Developer! The setup is complete.");
