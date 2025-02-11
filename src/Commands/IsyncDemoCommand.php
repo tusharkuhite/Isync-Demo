@@ -58,4 +58,15 @@ class IsyncDemoCommand extends Command
         $this->info("\n✅ Installation complete.\n");
         $this->info("🎉 Hello Isync Developer! The setup is complete.");
     }
+    
+    private function showLoading($message)
+    {
+        $this->output->write($message);
+        for ($i = 0; $i < 3; $i++) {
+            sleep(1);
+            $this->output->write('.');
+        }
+        $this->info("");
+    }
+
 }
