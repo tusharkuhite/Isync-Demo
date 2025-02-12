@@ -29,7 +29,7 @@ class IsyncDemoCommand extends Command
             '--force' => true
         ]);
         
-        $this->call('db:seed', [
+        $this->callSilently('db:seed', [
             '--class' => 'Isync\\Demo\\Database\\Seeders\\DatabaseSeeder'
         ]);
         
